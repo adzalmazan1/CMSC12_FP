@@ -19,11 +19,11 @@ public class EventHandler implements KeyListener {
             // up
             case 38:
                 break;
-            // down
-            case 40:
-                break;
             // right
             case 39:
+                break;
+            // down
+            case 40:
                 break;
             default:
                 break;

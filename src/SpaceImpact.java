@@ -43,8 +43,8 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public void draw(Graphics g) {
         // draw a grid in the screen
-        g.setColor(Color.gray); 
-        for(int i = 0; i < columns; i++) {
+        g.setColor(Color.RED); 
+        for(int i = 0; i <= columns; i++) {
             // vertical
             // starts the line at the top of the screen (i * tileSize, 0) and ends at the bottom (i * tileSize, screenHeight)
             g.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
