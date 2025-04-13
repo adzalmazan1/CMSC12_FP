@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class SpaceImpact extends JPanel implements Runnable {
     // temporary variables
@@ -10,13 +11,13 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     Thread gameThread;
     EventHandler eventH = new EventHandler();
-    ComputerVirus compVirus = new ComputerVirus(this, eventH);
+
+    ArrayList<ComputerVirus> compViruses = new ArrayList<ComputerVirus>();
 
     public SpaceImpact() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
-        
         this.addKeyListener(eventH);
         this.setFocusable(true);
     }
@@ -27,39 +28,55 @@ public class SpaceImpact extends JPanel implements Runnable {
         gameThread.start(); // calls run
     }
 
-    // for gameThread
     @Override
+    // Reference for gameThread logic -> RyiSnow (Youtube)
+    // Link: https://www.youtube.com/watch?v=VpH33Uw-_0E&list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq&t=2084s
     public void run() {
-        // second to nanosecond conversion 1 - 1e+9
-        double drawInterval = 1000000000 / FPS; // 
+        double drawInterval = 1000000000 / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
 
-        while(gameThread != null) {
+        long lastSpawnTime = System.currentTimeMillis();
+        int spawnDelay = 500; 
+
+        // while loop keeps updating regardless if interacting with the screen or not
+        while (gameThread != null) {
+            // quick processes
             update();
             repaint();
-
-            // recheck logic here 
-            // try KYC
+            
+            // To do: update this logic via constraints later
+            long currentTime = System.currentTimeMillis(); // keeps getting update via loop
+            if (currentTime - lastSpawnTime >= spawnDelay) {
+                compViruses.add(new ComputerVirus(this, eventH));
+                lastSpawnTime = currentTime;
+            }
+        
+            // updated system nano time after update and repaint
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
                 remainingTime = remainingTime / 1000000;
 
-                if(remainingTime < 0) {
+                if (remainingTime < 0)  {
                     remainingTime = 0;
                 }
 
+                // Thread.sleep() method can be used to pause the execution of the current thread for a specified time in milliseconds.
                 Thread.sleep((long) remainingTime);
-
+                // nextDrawTime gets updated
                 nextDrawTime += drawInterval;
-            }
-            catch(InterruptedException e) {
+            } 
+            catch (InterruptedException e) {
                 e.printStackTrace();
-            }    
+            }
         }
     }
 
     public void update() {
-        compVirus.update();
+        /* 
+        for (ComputerVirus virus : compViruses) {
+            virus.update();
+        }
+        */
     }
 
     public void paintComponent(Graphics g) {
@@ -79,12 +96,8 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
 
-        // draw a virus here
-        compVirus.draw((Graphics2D)g);
-        
-        
-        
-        // ???
-        g.dispose();
+        for (ComputerVirus virus : compViruses) {
+            virus.draw((Graphics2D) g);
+        }
     }
 }
