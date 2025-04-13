@@ -23,16 +23,15 @@ public class ComputerVirus extends Entity {
     }
 
     public void setDefaultValues() {
-        // only for x values
-        // local vars
-        int min = ((4 * spaceImpact.columns) /  5);
-        int max = spaceImpact.columns;
+        int xMin = ((4 * spaceImpact.columns) /  5);
+        int xMax = spaceImpact.columns;
 
-        x = min + (int)(Math.random() * ((max - min)));        
-        y = (int)(Math.random() * spaceImpact.rows); // generates a random integer from 0 to spaceImpact.rows - 1
+        int yMin = 2;
+        int yMax = spaceImpact.rows;
 
-        System.out.println(min);
-        System.out.println(max);
+        x = xMin + (int)(Math.random() * ((xMax - xMin)));
+        y = yMin + (int)(Math.random() * ((yMax - yMin)));
+
         speed = 4;
         direction = "up";
     }
