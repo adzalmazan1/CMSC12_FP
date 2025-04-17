@@ -8,7 +8,7 @@ public class Main {
         frame.setResizable(false);
         frame.setTitle("Space Impact");
 
-        SpaceImpact spaceImpact = new SpaceImpact();
+        SpaceImpact spaceImpact = new SpaceImpact(); // JPanel
         frame.add(spaceImpact);
         frame.pack(); // fits the preferred size of its subcomponents
     

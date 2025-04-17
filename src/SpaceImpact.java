@@ -36,21 +36,20 @@ public class SpaceImpact extends JPanel implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         long lastSpawnTime = System.currentTimeMillis();
-        int spawnDelay = 500; 
-
+        int spawnInterval = 500;
+        
         // while loop keeps updating regardless if interacting with the screen or not
         while (gameThread != null) {
             // quick processes
             update();
             repaint();
-            
-            // To do: update this logic via constraints later
-            long currentTime = System.currentTimeMillis(); // keeps getting update via loop
-            if (currentTime - lastSpawnTime >= spawnDelay) {
+
+            long currentTime = System.currentTimeMillis();
+            if(currentTime - lastSpawnTime >= spawnInterval) {
                 compViruses.add(new ComputerVirus(this, eventH));
                 lastSpawnTime = currentTime;
             }
-        
+
             // updated system nano time after update and repaint
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
@@ -72,32 +71,34 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public void update() {
-        /* 
-        for (ComputerVirus virus : compViruses) {
-            virus.update();
-        }
-        */
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        draw(g);
+        Graphics2D g2D = (Graphics2D) g;
+        
+        draw(g2D); // uses Graphics2D
+
+        // note i is every object in ArrayList of type ComputerVirus
+        for(ComputerVirus i : compViruses) {
+            i.draw(g2D);
+        }
+                
+        g2D.dispose();
     }
 
-    public void draw(Graphics g) {
+    // temporary grid is for the panel
+    public void draw(Graphics2D g2D) {
         // draw a grid in the screen
-        g.setColor(Color.RED); 
+        g2D.setColor(Color.RED); 
         for(int i = 0; i <= columns; i++) {
             // vertical
             // starts the line at the top of the screen (i * tileSize, 0) and ends at the bottom (i * tileSize, screenHeight)
-            g.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
+            g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
             if(i <= rows) {
-                g.drawLine(0, i * tileSize, screenWidth, i * tileSize);
+                g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
-        }
-
-        for (ComputerVirus virus : compViruses) {
-            virus.draw((Graphics2D) g);
         }
     }
 }
