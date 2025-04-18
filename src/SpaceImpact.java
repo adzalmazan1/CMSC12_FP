@@ -1,6 +1,10 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+
+import javax.swing.JPanel;
 
 public class SpaceImpact extends JPanel implements Runnable {
     // temporary variables
@@ -13,6 +17,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     EventHandler eventH = new EventHandler();
 
     ArrayList<ComputerVirus> compViruses = new ArrayList<ComputerVirus>();
+    
+    Player player = new Player(this, eventH);
 
     public SpaceImpact() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -36,7 +42,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         long lastSpawnTime = System.currentTimeMillis();
-        int spawnInterval = 500;
+        int spawnInterval = 2000;
         
         // while loop keeps updating regardless if interacting with the screen or not
         while (gameThread != null) {
@@ -46,7 +52,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
             long currentTime = System.currentTimeMillis();
             if(currentTime - lastSpawnTime >= spawnInterval) {
-                compViruses.add(new ComputerVirus(this, eventH));
+                compViruses.add(new ComputerVirus(this));
                 lastSpawnTime = currentTime;
             }
 
@@ -71,7 +77,10 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public void update() {
-
+        for(ComputerVirus i : compViruses) {
+            i.update();
+        }
+        player.update();
     }
 
     public void paintComponent(Graphics g) {
@@ -84,7 +93,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         for(ComputerVirus i : compViruses) {
             i.draw(g2D);
         }
-                
+        player.draw(g2D);   
         g2D.dispose();
     }
 
