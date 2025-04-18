@@ -27,14 +27,16 @@ public class ComputerVirus extends Entity {
         x = xMin + (int)(Math.random() * ((xMax - xMin)));
         y = yMin + (int)(Math.random() * ((yMax - yMin)));
 
-        direction = "down";
+        direction = "def";
         speed = 5;
     }
 
     public void loadCompVirusImage() {
         try {
-            down1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirus.png")); // load an img
-            down2 = ImageIO.read(getClass().getResourceAsStream("img/computerVirus2.png")); // load an img
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/computerVirusDef.png")); 
+            left1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusLeft.png")); 
+            up1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusPink1.png")); 
+            down1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusPink2.png")); 
         }
         catch (IOException e){
             e.printStackTrace();
@@ -45,13 +47,13 @@ public class ComputerVirus extends Entity {
         // update information about computer virus object created
         frameCounter++;
         if(frameCounter >= frameChange) {
-            // everything happens in one frame
             if(spriteNum == 1) {
-                spriteNum = 2;
+                spriteNum = 2; 
             }
             else if(spriteNum == 2) {
                 spriteNum = 1;
             }
+            direction = "def";
             frameCounter = 0;
         }
 
@@ -59,6 +61,7 @@ public class ComputerVirus extends Entity {
         if(movementCounter >= movementChange) {
             x -= speed;
             y -= -speed + Math.random() * (speed * 2);
+            direction = "up";
             movementCounter = 0;
         }
     }
@@ -66,17 +69,27 @@ public class ComputerVirus extends Entity {
     public void draw(Graphics2D g2D) {
         BufferedImage img = null;
         switch (direction) {
-            case "down":
+            case "def":
                 if(spriteNum == 1) {
-                    img = down1;
+                    img = defaultImg;
                 }
                 else if(spriteNum == 2) {
-                    img = down2;
+                    img = left1;
+                }
+                break;
+            case "up":
+                if(spriteNum == 1) {
+                    img = up1;
+                }
+                else if(spriteNum == 2) {
+                    img = down1;
                 }
                 break;
             default:
                 break;
+       
         }
+        
 
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
         g2D.drawImage(img, x, y, spaceImpact.tileSize, spaceImpact.tileSize, null);

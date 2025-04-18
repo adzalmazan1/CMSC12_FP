@@ -3,7 +3,7 @@ import java.awt.event.KeyListener;
 
 public class EventHandler implements KeyListener {
     // note: protected can be accessed in the same pkg
-    protected boolean upPressed, downPressed, leftPressed, rightPressed;
+    protected boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -31,6 +31,8 @@ public class EventHandler implements KeyListener {
             case 40:
                 downPressed = true;
                 break;
+            case 32:
+                spacePressed = true;
             default:
                 break;
         }
@@ -58,6 +60,8 @@ public class EventHandler implements KeyListener {
             case 40:
                 downPressed = false;
                 break;
+            case 32:
+                spacePressed = false;
             default:
                 break;
         }

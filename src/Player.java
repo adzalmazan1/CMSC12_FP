@@ -1,12 +1,15 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 public class Player extends Entity {
     SpaceImpact spaceImpact;
     EventHandler eventH;
+
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
     public Player(SpaceImpact spaceImpact, EventHandler eventH) {
         this.spaceImpact = spaceImpact;
@@ -19,54 +22,54 @@ public class Player extends Entity {
     public void setDefaultValues() {
         x = 20;
         y = 20;
-        direction = "up";
+        direction = "def";
         speed = 5;
     }
 
     public void loadPlayerImage() {
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("img/player.png")); // load an img
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/player.png")); // load an img
         }
         catch (IOException e){
             e.printStackTrace();
         }
     }
 
+    // add sprite update
     public void update() {
-        // if any of the keys pressed
-        // update
-        if(eventH.upPressed || eventH.downPressed || eventH. leftPressed || eventH .rightPressed) {
+        if(eventH.upPressed || eventH.downPressed || eventH.leftPressed || eventH.rightPressed || eventH.spacePressed || eventH.spacePressed) {
             if(eventH.upPressed) {
-                direction = "up";
+                direction = "def";
                 y -= speed;
             }
             else if(eventH.downPressed) {
-                direction = "up"; // should be down
+                direction = "def";
                 y += speed;
             }
             else if(eventH.leftPressed) {
-                direction = "up";
+                direction = "def";
                 x -= speed;
             }
             else if(eventH.rightPressed) {
-                direction = "up";
+                direction = "def";
                 x += speed;
             }
+        }
+
+        if(eventH.spacePressed) {
+            bullets.add(new Bullet(spaceImpact));
+        }
+
+        for(Bullet i : bullets) {
+            i.update();
         }
     }
 
     public void draw(Graphics2D g2D) {
         BufferedImage img = null;
         switch (direction) {
-            case "up":
-                if(spriteNum == 1) {
-                    img = up1;
-                }
-                /* 
-                else if(spriteNum == 2) {
-                    img = down2;
-                }
-                */
+            case "def":
+                img = defaultImg;
                 break;
             default:
                 break;
@@ -74,9 +77,9 @@ public class Player extends Entity {
 
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
         g2D.drawImage(img, x, y, spaceImpact.tileSize * 3, spaceImpact.tileSize * 3, null);
-    }
 
-    public class Bullet {
-        
+        for(Bullet i : bullets) {
+            i.draw(g2D);
+        }
     }
 }

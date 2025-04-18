@@ -87,23 +87,20 @@ public class SpaceImpact extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         
-        draw(g2D); // uses Graphics2D
+        draw(g2D);
 
-        // note i is every object in ArrayList of type ComputerVirus
         for(ComputerVirus i : compViruses) {
             i.draw(g2D);
         }
-        player.draw(g2D);   
+
+        player.draw(g2D);
         g2D.dispose();
     }
 
-    // temporary grid is for the panel
+    // temporary grid for the panel
     public void draw(Graphics2D g2D) {
-        // draw a grid in the screen
         g2D.setColor(Color.RED); 
         for(int i = 0; i <= columns; i++) {
-            // vertical
-            // starts the line at the top of the screen (i * tileSize, 0) and ends at the bottom (i * tileSize, screenHeight)
             g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
             if(i <= rows) {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
