@@ -164,7 +164,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
 
-    // collission detection formula from Kenny Yip
+    // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
     public boolean detectCollission(ComputerVirus a, Bullet b) {
         return a.x < b.x + ((tileSize / 2) + 12) &&
         a.x + tileSize + 10 > b.x &&
