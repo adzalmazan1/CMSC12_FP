@@ -1,6 +1,6 @@
 # CMSC12_FP
 
-## Folder Structure
+## 🗂️ Folder Structure
 
 The workspace contains two folders by default, where:
 
