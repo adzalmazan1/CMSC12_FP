@@ -12,7 +12,7 @@ public class EventHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        System.out.println(code);
+        // System.out.println(code);
 
         switch (code) {
             // left
@@ -31,6 +31,7 @@ public class EventHandler implements KeyListener {
             case 40:
                 downPressed = true;
                 break;
+            // spacebar
             case 32:
                 spacePressed = true;
             default:
@@ -41,7 +42,7 @@ public class EventHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        System.out.println(code);
+        // System.out.println(code);
 
         switch (code) {
             // left
@@ -60,6 +61,7 @@ public class EventHandler implements KeyListener {
             case 40:
                 downPressed = false;
                 break;
+            // spacebar
             case 32:
                 spacePressed = false;
             default:

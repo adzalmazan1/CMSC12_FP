@@ -6,24 +6,27 @@ import javax.imageio.ImageIO;
 
 public class Bullet extends Entity {
     SpaceImpact spaceImpact;
-    private int movementChange = 60;
+    Player player;
 
-    public Bullet(SpaceImpact spaceImpact) {
+    private int movementChange = 10;
+
+    public Bullet(SpaceImpact spaceImpact, Player player) {
         this.spaceImpact = spaceImpact;
+        this.player = player;
+
         setDefaultValues();
         loadBulletImage();
     }
 
     public void setDefaultValues() {
-        x = 20;
-        y = 20;
-        direction = "def";
-        speed = 100;
+        x = player.x + (spaceImpact.tileSize  * 3);
+        y = player.y + (spaceImpact.tileSize  * 2);
+        speed = 50;
     }
 
     public void loadBulletImage() {
         try {
-            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bullet.png")); // load an img
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bullet.png"));
         }
         catch (IOException e){
             e.printStackTrace();
@@ -36,18 +39,15 @@ public class Bullet extends Entity {
             x += speed;
             movementCounter = 0;
         }
+
+        if(x >= spaceImpact.screenWidth) {
+            outOfBounds = true;
+        }
     }
 
     public void draw(Graphics2D g2D) {
-        BufferedImage img = null;
-        switch (direction) {
-            case "def":
-                img = defaultImg;
-                break;
-            default:
-                break;
-        }
-        // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
-        g2D.drawImage(img, x, y, spaceImpact.tileSize, spaceImpact.tileSize, null);
+        // default image for bullet
+        BufferedImage img =  defaultImg;
+        g2D.drawImage(img, x, y, (spaceImpact.tileSize / 2) + 12, (spaceImpact.tileSize / 4) + 12, null); // uses SpaceImpact
     }
 }

@@ -1,15 +1,12 @@
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 public class Player extends Entity {
     SpaceImpact spaceImpact;
     EventHandler eventH;
-
-    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
     public Player(SpaceImpact spaceImpact, EventHandler eventH) {
         this.spaceImpact = spaceImpact;
@@ -20,8 +17,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        x = 20;
-        y = 20;
+        x = spaceImpact.tileSize;
+        y = 3 * spaceImpact.tileSize;
         direction = "def";
         speed = 5;
     }
@@ -37,7 +34,7 @@ public class Player extends Entity {
 
     // add sprite update
     public void update() {
-        if(eventH.upPressed || eventH.downPressed || eventH.leftPressed || eventH.rightPressed || eventH.spacePressed || eventH.spacePressed) {
+        if(eventH.upPressed || eventH.downPressed || eventH.leftPressed || eventH.rightPressed) {
             if(eventH.upPressed) {
                 direction = "def";
                 y -= speed;
@@ -55,17 +52,11 @@ public class Player extends Entity {
                 x += speed;
             }
         }
-
-        if(eventH.spacePressed) {
-            bullets.add(new Bullet(spaceImpact));
-        }
-
-        for(Bullet i : bullets) {
-            i.update();
-        }
     }
 
+    // currently uses default image only
     public void draw(Graphics2D g2D) {
+        // draw player
         BufferedImage img = null;
         switch (direction) {
             case "def":
@@ -75,11 +66,6 @@ public class Player extends Entity {
                 break;
         }
 
-        // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
         g2D.drawImage(img, x, y, spaceImpact.tileSize * 3, spaceImpact.tileSize * 3, null);
-
-        for(Bullet i : bullets) {
-            i.draw(g2D);
-        }
     }
 }

@@ -6,6 +6,7 @@ public class Entity {
     
     protected BufferedImage defaultImg, up1, down1, left1, right1; // animation purposes
     protected String direction;
+    protected boolean outOfBounds = false;
 
     protected int frameCounter = 0;
     protected int movementCounter = 0;

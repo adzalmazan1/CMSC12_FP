@@ -7,22 +7,25 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class SpaceImpact extends JPanel implements Runnable {
-    // temporary variables
     protected final int tileSize = 35, rows = 16, columns = 25;
     protected final int screenWidth = columns * tileSize, screenHeight = rows * tileSize;
 
     private int FPS = 60;
+    private long lastBulletTime = System.currentTimeMillis();
+    private int bulletInterval = 500;
 
     Thread gameThread;
     EventHandler eventH = new EventHandler();
 
+    // have to check for collission
     ArrayList<ComputerVirus> compViruses = new ArrayList<ComputerVirus>();
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     
     Player player = new Player(this, eventH);
 
     public SpaceImpact() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.lightGray);
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
@@ -77,12 +80,56 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public void update() {
-        for(ComputerVirus i : compViruses) {
-            i.update();
-        }
         player.update();
+    
+        if (eventH.spacePressed) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastBulletTime >= bulletInterval) {
+                bullets.add(new Bullet(this, player));
+                lastBulletTime = currentTime;
+            }
+        }
+    
+        // virus update priority 
+        for (int i = compViruses.size() - 1; i >= 0; i--) {
+            ComputerVirus cv = compViruses.get(i);
+            cv.update();
+            if (cv.outOfBounds) {
+                compViruses.remove(i);
+            }
+        }
+    
+        // bullet update 
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            b.update();
+    
+            if (b.outOfBounds) {
+                bullets.remove(i);
+                continue;
+            }
+    
+            boolean bulletUsed = false;
+    
+            for (int j = compViruses.size() - 1; j >= 0; j--) {
+                ComputerVirus cv = compViruses.get(j);
+    
+                if (detectCollission(cv, b)) {
+                    System.out.println("Collision detected!");
+                    bullets.remove(i);
+                    compViruses.remove(j);
+                    bulletUsed = true;
+                    break;
+                }
+            }
+            
+            if (bulletUsed) {
+                // breaks out from bullet update loop when bullet is used
+                break;
+            }
+        }
     }
-
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
@@ -94,6 +141,12 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
 
         player.draw(g2D);
+
+        // draw bullets
+        for(Bullet i : bullets) {
+            i.draw(g2D);
+        }
+
         g2D.dispose();
     }
 
@@ -106,5 +159,16 @@ public class SpaceImpact extends JPanel implements Runnable {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
+
+        g2D.setColor(new Color(255, 0, 0, 128));
+        g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
+    }
+
+    // collission detection formula from Kenny Yip
+    public boolean detectCollission(ComputerVirus a, Bullet b) {
+        return a.x < b.x + ((tileSize / 2) + 12) &&
+        a.x + tileSize + 10 > b.x &&
+        a.y < b.y + ((tileSize / 4) + 12) &&
+        a.y + tileSize + 10 > b.y;
     }
 }
