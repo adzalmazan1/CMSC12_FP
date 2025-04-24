@@ -18,9 +18,10 @@ public class Bullet extends Entity {
         loadBulletImage();
     }
 
+    // bullet default values
     public void setDefaultValues() {
-        x = player.x + (spaceImpact.tileSize  * 3);
-        y = player.y + (spaceImpact.tileSize  * 2);
+        x = player.x + (spaceImpact.tileSize  * 4);
+        y = player.y + 20;
         speed = 50;
     }
 

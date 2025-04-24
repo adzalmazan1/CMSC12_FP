@@ -4,12 +4,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class SpaceImpact extends JPanel implements Runnable {
     protected final int tileSize = 35, rows = 16, columns = 25;
     protected final int screenWidth = columns * tileSize, screenHeight = rows * tileSize;
 
+    private ImageIcon background = new ImageIcon(getClass().getResource("img/gameBackground.gif")); // background animation for SpaceImpact Panel 
     private int FPS = 60;
     private long lastBulletTime = System.currentTimeMillis();
     private int bulletInterval = 500;
@@ -25,7 +27,6 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public SpaceImpact() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.lightGray);
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
@@ -115,7 +116,6 @@ public class SpaceImpact extends JPanel implements Runnable {
                 ComputerVirus cv = compViruses.get(j);
     
                 if (detectCollission(cv, b)) {
-                    System.out.println("Collision detected!");
                     bullets.remove(i);
                     compViruses.remove(j);
                     bulletUsed = true;
@@ -133,6 +133,20 @@ public class SpaceImpact extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
+
+        /* ImageIcon
+            paints Icons from Images
+            Images that are created from a URL, filename or byte array are preloaded using MediaTracker to monitor the loaded state of the image.
+            
+            Arguments/Parameters
+            c - the component to be used as the observer if this icon has no image observer
+            g - the graphics context
+            x - the X coordinate of the icon's top-left corner
+            y - the Y coordinate of the icon's top-left corner
+        */
+        if (background != null) {
+            background.paintIcon(this, g2D, 0, 0);
+        }
         
         draw(g2D);
 
@@ -152,15 +166,17 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // temporary grid for the panel
     public void draw(Graphics2D g2D) {
-        g2D.setColor(Color.RED); 
+        /* 
+        g2D.setColor(Color.CYAN); 
         for(int i = 0; i <= columns; i++) {
             g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
             if(i <= rows) {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
-
-        g2D.setColor(new Color(255, 0, 0, 128));
+        */
+        
+        g2D.setColor(new Color(25,32,38));
         g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
 

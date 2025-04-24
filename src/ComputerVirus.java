@@ -7,9 +7,6 @@ import javax.imageio.ImageIO;
 public class ComputerVirus extends Entity {
     SpaceImpact spaceImpact;
 
-    private int frameChange = 20;
-    private int movementChange = 60; // (1 sec, 1 movement)
-
     public ComputerVirus(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
 
@@ -27,16 +24,17 @@ public class ComputerVirus extends Entity {
         x = xMin + (int)(Math.random() * ((xMax - xMin)));
         y = yMin + (int)(Math.random() * ((yMax - yMin)));
 
-        direction = "def";
+        direction = "up";
         speed = 50;
+
+        frameChange = 20;
+        movementChange = 60; // (1 sec, 1 movement)
     }
 
     public void loadCompVirusImage() {
         try {
-            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/test.png")); 
-            left1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusLeft.png")); 
-            up1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusPink1.png")); 
-            down1 = ImageIO.read(getClass().getResourceAsStream("img/computerVirusPink2.png")); 
+            up = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/up.png"));
+            down = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/down.png"));
         }
         catch (IOException e){
             e.printStackTrace();
@@ -48,11 +46,12 @@ public class ComputerVirus extends Entity {
         frameCounter++;
         if (frameCounter >= frameChange) {
             if (spriteNum == 1) {
+                direction = "down";
                 spriteNum = 2; 
             } else if (spriteNum == 2) {
+                direction = "up";
                 spriteNum = 1;
             }
-            direction = "def";
             frameCounter = 0;
         }
     
@@ -69,7 +68,7 @@ public class ComputerVirus extends Entity {
             } else {
                 x = newX;
                 // y = newY;
-                direction = "up";
+                // direction = "up";
             }
             
             movementCounter = 0;
@@ -77,31 +76,17 @@ public class ComputerVirus extends Entity {
     }
 
     public void draw(Graphics2D g2D) {
-        BufferedImage img = defaultImg;
-        /* 
+        BufferedImage img = null;
         switch (direction) {
-            case "def":
-                if(spriteNum == 1) {
-                    img = defaultImg;
-                }
-                else if(spriteNum == 2) {
-                    img = left1;
-                }
-                break;
             case "up":
-                if(spriteNum == 1) {
-                    img = up1;
-                }
-                else if(spriteNum == 2) {
-                    img = down1;
-                }
+                img = up;
                 break;
-            default:
+            case "down":
+                img = down;
                 break;
-        
-        } */
+        } 
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
-        g2D.drawImage(img, x, y, spaceImpact.tileSize + 10, spaceImpact.tileSize + 10, null);
+        g2D.drawImage(img, x, y, spaceImpact.tileSize + 20, (spaceImpact.tileSize / 2) + 20, null);
     }
 }
 
