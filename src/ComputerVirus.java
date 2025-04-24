@@ -58,8 +58,8 @@ public class ComputerVirus extends Entity {
         // previous: move -> delete in the middle of movement
         movementCounter++;
         if (movementCounter >= movementChange) {
-            // double yMovement = -speed + Math.random() * (speed * 2);
-            // int newY = (int)(y - yMovement);
+            double yMovement = -speed + Math.random() * (speed * 2);
+            int newY = (int)(y - yMovement);
             int newX = (int) (x - speed);
             
             // check bounds 
@@ -67,8 +67,7 @@ public class ComputerVirus extends Entity {
                 outOfBounds = true;
             } else {
                 x = newX;
-                // y = newY;
-                // direction = "up";
+                y = newY;
             }
             
             movementCounter = 0;
@@ -85,6 +84,7 @@ public class ComputerVirus extends Entity {
                 img = down;
                 break;
         } 
+        // height tile/2 = 50, orig ratio = 55
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
         g2D.drawImage(img, x, y, spaceImpact.tileSize + 20, (spaceImpact.tileSize / 2) + 20, null);
     }
