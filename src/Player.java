@@ -15,7 +15,7 @@ public class Player extends Entity {
         this.eventH = eventH;
 
         setDefaultValues();
-        loadPlayerImage();
+        loadImage();
     }
 
     public void setDefaultValues() {
@@ -26,7 +26,7 @@ public class Player extends Entity {
         frameChange = 35;
     }
 
-    public void loadPlayerImage() {
+    public void loadImage() {
         try {
             defaultImg = ImageIO.read(getClass().getResourceAsStream("img/playerSprites/default1.png")); // load an img
             defaultImg2 = ImageIO.read(getClass().getResourceAsStream("img/playerSprites/default2.png")); // load an img

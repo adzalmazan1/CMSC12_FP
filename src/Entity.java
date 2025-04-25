@@ -1,6 +1,6 @@
 import java.awt.image.BufferedImage;
 
-public class Entity {
+public class Entity implements Deployable {
     protected int x, y;
     protected double speed;
     
@@ -15,4 +15,12 @@ public class Entity {
     protected int movementChange;
 
     protected int spriteNum = 1; // sprite picker
+
+    @Override
+    public void setDefaultValues() {
+    }
+
+    @Override
+    public void loadImage() {
+    }
 }

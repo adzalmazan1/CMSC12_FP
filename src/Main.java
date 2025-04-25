@@ -14,6 +14,7 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        // this game thread shall only be started if we are led to this panel
         spaceImpact.startGameThread();
     }
 }

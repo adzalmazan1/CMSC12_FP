@@ -11,7 +11,7 @@ public class ComputerVirus extends Entity {
         this.spaceImpact = spaceImpact;
 
         setDefaultValues();
-        loadCompVirusImage();
+        loadImage();
     }
 
     public void setDefaultValues() {
@@ -31,7 +31,7 @@ public class ComputerVirus extends Entity {
         movementChange = 60; // (1 sec, 1 movement)
     }
 
-    public void loadCompVirusImage() {
+    public void loadImage() {
         try {
             up = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/up.png"));
             down = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/down.png"));

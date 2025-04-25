@@ -30,6 +30,8 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
+
+        
     }
 
     // starting the game thread
@@ -166,6 +168,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // temporary grid for the panel
     public void draw(Graphics2D g2D) {
+        
         /* 
         g2D.setColor(Color.CYAN); 
         for(int i = 0; i <= columns; i++) {
@@ -175,7 +178,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
         */
-        
+
         g2D.setColor(new Color(25,32,38));
         g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
