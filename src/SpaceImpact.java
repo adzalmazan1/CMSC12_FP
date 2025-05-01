@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,7 +33,6 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.setFocusable(true);
     }
     
-
     // starting the game thread
     public void startGameThread() {
         gameThread = new Thread(this); // passes SpaceImpact as argument
@@ -169,16 +169,13 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // temporary grid for the panel
     public void draw(Graphics2D g2D) {
-        
-        /* 
-        g2D.setColor(Color.CYAN); 
+        g2D.setColor(Color.BLACK); 
         for(int i = 0; i <= columns; i++) {
             g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
             if(i <= rows) {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
-        */
 
         // g2D.setColor(new Color(25,32,38));
         // g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);

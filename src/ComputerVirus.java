@@ -58,8 +58,14 @@ public class ComputerVirus extends Entity implements Deployable {
         // previous: move -> delete in the middle of movement
         movementCounter++;
         if (movementCounter >= movementChange) {
-            double yMovement = -speed + Math.random() * (speed * 2);
-            int newY = (int)(y - yMovement);
+            double yMovement;
+            int newY;
+
+            do {
+                yMovement = -speed + Math.random() * (speed * 2);
+                newY = (int)(y - yMovement);
+            } while(newY <= spaceImpact.tileSize * 2 || newY >= spaceImpact.screenHeight - (spaceImpact.tileSize * 3));
+            
             int newX = (int) (x - speed);
             
             // check bounds 

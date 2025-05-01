@@ -26,6 +26,7 @@ public class Player extends Entity implements Deployable {
         direction = "def";
         speed = 5;
         frameChange = 35;
+        // out of bounds
     }
 
     public void loadImage() {
