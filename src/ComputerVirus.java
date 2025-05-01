@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class ComputerVirus extends Entity {
+public class ComputerVirus extends Entity implements Deployable {
     SpaceImpact spaceImpact;
 
     public ComputerVirus(SpaceImpact spaceImpact) {
@@ -65,7 +65,8 @@ public class ComputerVirus extends Entity {
             // check bounds 
             if (newX <= -spaceImpact.tileSize) {
                 outOfBounds = true;
-            } else {
+            } 
+            else {
                 x = newX;
                 y = newY;
             }
@@ -86,7 +87,7 @@ public class ComputerVirus extends Entity {
         } 
         // height tile/2 = 50, orig ratio = 55
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
-        g2D.drawImage(img, x, y, spaceImpact.tileSize + 20, (spaceImpact.tileSize / 2) + 20, null);
+        g2D.drawImage(img, x, y, spaceImpact.tileSize + 12, (spaceImpact.tileSize / 2) + 12, null);
     }
 }
 

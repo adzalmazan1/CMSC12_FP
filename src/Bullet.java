@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Bullet extends Entity {
+public class Bullet extends Entity implements Deployable {
     SpaceImpact spaceImpact;
     Player player;
 
@@ -15,7 +15,7 @@ public class Bullet extends Entity {
         this.player = player;
 
         setDefaultValues();
-        loadBulletImage();
+        loadImage();
     }
 
     // bullet default values
@@ -25,7 +25,7 @@ public class Bullet extends Entity {
         speed = 50;
     }
 
-    public void loadBulletImage() {
+    public void loadImage() {
         try {
             defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bullet.png"));
         }
@@ -49,6 +49,6 @@ public class Bullet extends Entity {
     public void draw(Graphics2D g2D) {
         // default image for bullet
         BufferedImage img =  defaultImg;
-        g2D.drawImage(img, x, y, (spaceImpact.tileSize / 2) + 12, (spaceImpact.tileSize / 4) + 12, null); // uses SpaceImpact
+        g2D.drawImage(img, x, y, (spaceImpact.tileSize / 2) + 7, (spaceImpact.tileSize / 4) + 7, null); // uses SpaceImpact
     }
 }

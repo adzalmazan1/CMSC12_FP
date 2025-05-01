@@ -9,8 +9,8 @@ public class Main {
         
         SpaceImpact spaceImpact = new SpaceImpact(); // JPanel
         frame.add(spaceImpact);
-        frame.pack(); // fits the preferred size of its subcomponents
-    
+        frame.pack(); // fits the preferred size of its subcomponents 
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

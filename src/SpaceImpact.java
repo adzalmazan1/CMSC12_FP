@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,7 +14,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int FPS = 60;
     private long lastBulletTime = System.currentTimeMillis();
     private int bulletInterval = 500;
-
+    
     Thread gameThread;
     EventHandler eventH = new EventHandler();
 
@@ -24,15 +23,15 @@ public class SpaceImpact extends JPanel implements Runnable {
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
     
     Player player = new Player(this, eventH);
+    Adware adware = new Adware(this);
 
     public SpaceImpact() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
-
-        
     }
+    
 
     // starting the game thread
     public void startGameThread() {
@@ -84,6 +83,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public void update() {
         player.update();
+        // adware.update();
     
         if (eventH.spacePressed) {
             long currentTime = System.currentTimeMillis();
@@ -157,6 +157,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
 
         player.draw(g2D);
+        // adware.draw(g2D);
 
         // draw bullets
         for(Bullet i : bullets) {
@@ -179,8 +180,8 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
         */
 
-        g2D.setColor(new Color(25,32,38));
-        g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
+        // g2D.setColor(new Color(25,32,38));
+        // g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU

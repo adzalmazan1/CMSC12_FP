@@ -4,11 +4,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Player extends Entity {
+public class Player extends Entity implements Deployable {
     SpaceImpact spaceImpact;
     EventHandler eventH;
 
     private BufferedImage defaultImg2;
+    private int playerDimension;
 
     public Player(SpaceImpact spaceImpact, EventHandler eventH) {
         this.spaceImpact = spaceImpact;
@@ -19,6 +20,7 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
+        playerDimension = spaceImpact.tileSize * 3;
         x = spaceImpact.tileSize;
         y = 3 * spaceImpact.tileSize;
         direction = "def";
@@ -55,19 +57,19 @@ public class Player extends Entity {
         }
     
         if(eventH.upPressed || eventH.downPressed || eventH.leftPressed || eventH.rightPressed) {
-            if(eventH.upPressed) {
+            if(eventH.upPressed  && y - speed >= spaceImpact.tileSize * 2) {
                 direction = "up";
                 y -= speed;
             }
-            else if(eventH.downPressed) {
+            else if(eventH.downPressed &&  y + speed < spaceImpact.screenHeight - playerDimension) {
                 direction = "down";
                 y += speed;
             }
-            else if(eventH.leftPressed) {
+            else if(eventH.leftPressed && x - speed >= 0) {
                 direction = "left";
                 x -= speed;
             }
-            else if(eventH.rightPressed) {
+            else if(eventH.rightPressed && x + speed < spaceImpact.screenWidth - playerDimension) {
                 direction = "right";
                 x += speed;
             }
@@ -106,6 +108,6 @@ public class Player extends Entity {
                 break;
         }
 
-        g2D.drawImage(img, x, y, spaceImpact.tileSize * 4, spaceImpact.tileSize * 4, null);
+        g2D.drawImage(img, x, y, playerDimension, playerDimension, null);
     }
 }
