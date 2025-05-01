@@ -18,8 +18,8 @@ public class ComputerVirus extends Entity implements Deployable {
         int xMin = ((4 * spaceImpact.columns) /  5) * spaceImpact.tileSize;
         int xMax = (spaceImpact.columns - 1) * spaceImpact.tileSize;
 
-        int yMin = 5 * spaceImpact.tileSize;
-        int yMax = (spaceImpact.rows - 2) * spaceImpact.tileSize;
+        int yMin = spaceImpact.tileSize * 2;
+        int yMax = spaceImpact.screenHeight - (spaceImpact.tileSize * 2);
 
         x = xMin + (int)(Math.random() * ((xMax - xMin)));
         y = yMin + (int)(Math.random() * ((yMax - yMin)));
@@ -54,7 +54,7 @@ public class ComputerVirus extends Entity implements Deployable {
             }
             frameCounter = 0;
         }
-    
+        
         // previous: move -> delete in the middle of movement
         movementCounter++;
         if (movementCounter >= movementChange) {

@@ -1,4 +1,7 @@
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -8,7 +11,21 @@ public class Main {
         frame.setTitle("Space Impact");
         
         SpaceImpact spaceImpact = new SpaceImpact(); // JPanel
-        frame.add(spaceImpact);
+        SpaceImpactDisplay display = new SpaceImpactDisplay(spaceImpact);
+
+        // manages layering of components
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight)); // properties from space impact
+        layeredPane.setLayout(null); // set to null to be able to do the overlapping panels
+
+        spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
+        display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
+        
+        // set bounds for the components
+        layeredPane.add(spaceImpact, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(display, JLayeredPane.PALETTE_LAYER);
+        
+        frame.add(layeredPane);
         frame.pack(); // fits the preferred size of its subcomponents 
 
         frame.setLocationRelativeTo(null);
@@ -18,3 +35,4 @@ public class Main {
         spaceImpact.startGameThread();
     }
 }
+

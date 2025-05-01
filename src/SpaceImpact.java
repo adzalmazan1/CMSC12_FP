@@ -13,6 +13,11 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     private ImageIcon background = new ImageIcon(getClass().getResource("img/gameBackground.gif")); // background animation for SpaceImpact Panel 
     private int FPS = 60;
+
+    // moved spawn deets here
+    private long lastSpawnTime = System.currentTimeMillis();
+    private int spawnInterval = 2000;
+
     private long lastBulletTime = System.currentTimeMillis();
     private int bulletInterval = 500;
     
@@ -45,10 +50,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     public void run() {
         double drawInterval = 1000000000 / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
-
-        long lastSpawnTime = System.currentTimeMillis();
-        int spawnInterval = 2000;
-        
+    
         // while loop keeps updating regardless if interacting with the screen or not
         while (gameThread != null) {
             // quick processes
@@ -131,7 +133,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
     }
-    
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
