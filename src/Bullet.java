@@ -48,7 +48,7 @@ public class Bullet extends Entity implements Deployable {
 
     public void draw(Graphics2D g2D) {
         // default image for bullet
-        BufferedImage img =  defaultImg;
+        BufferedImage img = defaultImg;
         g2D.drawImage(img, x, y, (spaceImpact.tileSize / 2) + 7, (spaceImpact.tileSize / 4) + 7, null); // uses SpaceImpact
     }
 }

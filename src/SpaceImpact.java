@@ -24,6 +24,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int currentScore = 0;
     private int scorePlus = 50;
 
+    private int[] enterWaveScore = {200, 2000, 3000};
+
     private Thread gameThread;
     private EventHandler eventH;
 
@@ -33,7 +35,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     
     private Player player;
     private SpaceImpactDisplay display;
-    // private Adware adware;
+    private Adware adware;
 
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
@@ -41,7 +43,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.compViruses = new ArrayList<ComputerVirus>();
         this.bullets = new ArrayList<Bullet>();
         this.player = new Player(this, eventH);
-        // this.adware = new Adware(this);
+        this.adware = new Adware(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -96,9 +98,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public void update() {
         player.update();
-        // adware.update();
         
-        // U
         if (eventH.spacePressed) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastBulletTime >= bulletInterval) {
@@ -130,31 +130,39 @@ public class SpaceImpact extends JPanel implements Runnable {
     
             for (int j = compViruses.size() - 1; j >= 0; j--) {
                 ComputerVirus cv = compViruses.get(j);
-    
+                
+                // if collission is detected
                 if (detectCollission(cv, b)) {
                     bullets.remove(i);
                     compViruses.remove(j);
                     bulletUsed = true;
                     currentScore += scorePlus;
                     
-                    // 
+                    // null checking for best practices
                     if (display != null) {
                         display.setCurrentScore(currentScore);
                     }
                     break;
                 }
-            }
-            
+            }            
             if (bulletUsed) {
                 // breaks out from bullet update loop when bullet is used
                 break;
             }
         }
+
+        // Updating the game's current status
+        if(currentScore == enterWaveScore[0]) {
+            // Modify the text yet
+            adware.update();
+            display.setGamePlayStatus("Boss Level, Wave 1");
+        }
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g;
+        Graphics2D g2D = (Graphics2D) g; 
 
         /* ImageIcon
             paints Icons from Images
@@ -177,14 +185,18 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
 
         player.draw(g2D);
-        // adware.draw(g2D);
-
+        
         // draw bullets
         for(Bullet i : bullets) {
             i.draw(g2D);
         }
 
-        g2D.dispose();
+        // Draw Wave 1 Elements
+        if(currentScore == enterWaveScore[0]) {
+            adware.draw(g2D);
+        }
+
+        g2D.dispose();        
     }
 
     // temporary grid for the panel
@@ -196,7 +208,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
-
+  
         // g2D.setColor(new Color(25,32,38));
         // g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
