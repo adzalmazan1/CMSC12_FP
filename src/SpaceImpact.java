@@ -21,23 +21,34 @@ public class SpaceImpact extends JPanel implements Runnable {
     private long lastBulletTime = System.currentTimeMillis();
     private int bulletInterval = 500;
     
-    Thread gameThread;
-    EventHandler eventH = new EventHandler();
+    private int currentScore = 0;
+    private int scorePlus = 50;
+
+    private Thread gameThread;
+    private EventHandler eventH;
 
     // have to check for collission
-    ArrayList<ComputerVirus> compViruses = new ArrayList<ComputerVirus>();
-    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    private ArrayList<ComputerVirus> compViruses;
+    private ArrayList<Bullet> bullets; 
     
-    Player player = new Player(this, eventH);
-    Adware adware = new Adware(this);
+    private Player player;
+    private SpaceImpactDisplay display;
+    // private Adware adware;
 
-    public SpaceImpact() {
+    public SpaceImpact(SpaceImpactDisplay display) {
+        this.display = display;
+        this.eventH = new EventHandler();
+        this.compViruses = new ArrayList<ComputerVirus>();
+        this.bullets = new ArrayList<Bullet>();
+        this.player = new Player(this, eventH);
+        // this.adware = new Adware(this);
+
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
     }
-    
+
     // starting the game thread
     public void startGameThread() {
         gameThread = new Thread(this); // passes SpaceImpact as argument
@@ -86,7 +97,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     public void update() {
         player.update();
         // adware.update();
-    
+        
+        // U
         if (eventH.spacePressed) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastBulletTime >= bulletInterval) {
@@ -123,6 +135,12 @@ public class SpaceImpact extends JPanel implements Runnable {
                     bullets.remove(i);
                     compViruses.remove(j);
                     bulletUsed = true;
+                    currentScore += scorePlus;
+                    
+                    // 
+                    if (display != null) {
+                        display.setCurrentScore(currentScore);
+                    }
                     break;
                 }
             }

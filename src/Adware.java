@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Adware extends Entity implements Deployable {
-    SpaceImpact spaceImpact;
+    private SpaceImpact spaceImpact;
 
     public Adware(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
@@ -49,7 +49,4 @@ public class Adware extends Entity implements Deployable {
 
         g2D.drawImage(img, x, y, spaceImpact.tileSize * 3, spaceImpact.tileSize * 3, null);
     }
-    
-
-    // implementing the same methods
 }

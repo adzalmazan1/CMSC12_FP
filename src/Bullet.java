@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Bullet extends Entity implements Deployable {
-    SpaceImpact spaceImpact;
-    Player player;
+    private SpaceImpact spaceImpact;
+    private Player player;
 
     private int movementChange = 10;
 

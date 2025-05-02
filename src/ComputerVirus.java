@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ComputerVirus extends Entity implements Deployable {
-    SpaceImpact spaceImpact;
+    private SpaceImpact spaceImpact;
 
     public ComputerVirus(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;

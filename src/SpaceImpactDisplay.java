@@ -4,46 +4,46 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class SpaceImpactDisplay extends JPanel implements Deployable {
-    SpaceImpact spaceImpact;
-    BufferedImage heart;
+public class SpaceImpactDisplay extends JPanel {
+    private SpaceImpact spaceImpact;
+    private Life life;
+    private int lifeCount = 3;
+    
+    // global var for modification
+    private JLabel scoreCount;
+    private JLabel statusLabel;
 
-    int x, y;
-
-    int lifeCount = 3;
-
-    public SpaceImpactDisplay(SpaceImpact spaceImpact) {
-        this.spaceImpact = spaceImpact;
+    public SpaceImpactDisplay() {
+        this.spaceImpact = new SpaceImpact(this);
+        this.life = new Life(spaceImpact);
+        
         this.setLayout(new BorderLayout());
         
-        setDefaultValues();
-        loadImage();
-
         JPanel innerPanel = new JPanel();
         innerPanel.setBackground(new Color(25,32,38));
         innerPanel.setLayout(new GridLayout(1, 3));
 
-        JPanel panel1 = new JPanel() {
+        JPanel lifePanel = new JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2D = (Graphics2D) g;
+                draw(g2D);
+            }
 
-                g2D.setColor(Color.WHITE);
+            public void draw(Graphics2D g2D) {
                 for(int i = 0; i < lifeCount; i++){
-                    g2D.drawImage(heart, x * (2 * i + 1), y, spaceImpact.tileSize, spaceImpact.tileSize, null);
+                    life.draw(g2D, i);
                 }
+                
             }
         };
-        panel1.setOpaque(false);
 
+        lifePanel.setOpaque(false);
 
+        // .scoreboard .thisfunction()
         JPanel scoreBoard = new JPanel();
         scoreBoard.setLayout(new GridLayout(2, 1));
         scoreBoard.setOpaque(false);
@@ -51,42 +51,34 @@ public class SpaceImpactDisplay extends JPanel implements Deployable {
         JLabel scoreLabel = new JLabel("SCORE", JLabel.CENTER); // center a JLabel
         scoreLabel.setFont(new Font("Cambria", Font.BOLD, 20));
         scoreLabel.setForeground(Color.WHITE);
-        scoreBoard.add(scoreLabel, BorderLayout.NORTH);
+        scoreBoard.add(scoreLabel);
 
-        JLabel scoreCount = new JLabel("00", JLabel.CENTER);
+        scoreCount = new JLabel("0", JLabel.CENTER);
         scoreCount.setFont(new Font("Cambria", Font.BOLD, 20));
         scoreCount.setForeground(Color.WHITE);
-        scoreBoard.add(scoreCount, BorderLayout.SOUTH);
-        
-        JPanel panel3 = new JPanel();
-        panel3.setLayout(new BorderLayout());
+        scoreBoard.add(scoreCount);
 
-        JLabel statusLabel = new JLabel("First Wave", JLabel.CENTER);
+        JPanel statusBoard = new JPanel();
+        statusBoard.setLayout(new BorderLayout());
+        statusBoard.setOpaque(false);
+
+        statusLabel = new JLabel("First Wave", JLabel.CENTER);
         statusLabel.setFont(new Font("Cambria", Font.BOLD, 20));
         statusLabel.setForeground(Color.WHITE);
-        panel3.add(statusLabel, BorderLayout.CENTER);
-        panel3.setOpaque(false);
-
-        innerPanel.add(panel1);
+        statusBoard.add(statusLabel, BorderLayout.CENTER);
+        
+        innerPanel.add(lifePanel);
         innerPanel.add(scoreBoard);
-        innerPanel.add(panel3);
+        innerPanel.add(statusBoard);
 
         this.add(innerPanel, BorderLayout.CENTER);
     }
 
-    @Override
-    public void setDefaultValues() {
-        x = spaceImpact.tileSize;
-        y = spaceImpact.tileSize / 2;
+    public void setCurrentScore(int currentScore) {
+        scoreCount.setText(String.valueOf(currentScore));
     }
-
-    @Override
-    public void loadImage() {
-        try {
-            heart = ImageIO.read(getClass().getResourceAsStream("img/life.png"));
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
+    
+    public void setGamePlayStatus(String gpStat) {
+        statusLabel.setText(gpStat);
     }
 }

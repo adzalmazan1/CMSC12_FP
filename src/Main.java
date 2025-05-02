@@ -10,8 +10,8 @@ public class Main {
         frame.setResizable(false);
         frame.setTitle("Space Impact");
         
-        SpaceImpact spaceImpact = new SpaceImpact(); // JPanel
-        SpaceImpactDisplay display = new SpaceImpactDisplay(spaceImpact);
+        SpaceImpactDisplay display = new SpaceImpactDisplay();
+        SpaceImpact spaceImpact = new SpaceImpact(display); // JPanel
 
         // manages layering of components
         JLayeredPane layeredPane = new JLayeredPane();

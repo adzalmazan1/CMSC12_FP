@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Player extends Entity implements Deployable {
-    SpaceImpact spaceImpact;
-    EventHandler eventH;
+    private SpaceImpact spaceImpact;
+    private EventHandler eventH;
 
     private BufferedImage defaultImg2;
     private int playerDimension;
