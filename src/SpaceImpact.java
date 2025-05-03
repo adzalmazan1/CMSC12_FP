@@ -44,6 +44,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Player and event handler
     private Player player;
     private EventHandler eventH;
+    Sound sound = new Sound();
 
     // Bosses declaration
     private Adware adware;
@@ -68,7 +69,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         gameThread.start(); // calls run
     }
 
-    @Override
+    @Override 
     // Reference for gameThread logic -> RyiSnow (Youtube)
     // Link: https://www.youtube.com/watch?v=VpH33Uw-_0E&list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq&t=2084s
     public void run() {
@@ -96,10 +97,8 @@ public class SpaceImpact extends JPanel implements Runnable {
                     remainingTime = 0;
                 }
 
-                // Thread.sleep() method can be used to pause the execution of the current thread for a specified time in milliseconds.
-                Thread.sleep((long) remainingTime);
-                // nextDrawTime gets updated
-                nextDrawTime += drawInterval;
+                Thread.sleep((long) remainingTime); // Thread.sleep() method can be used to pause the execution of the current thread for a specified time in milliseconds.
+                nextDrawTime += drawInterval; // nextDrawTime gets updated
             } 
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -108,9 +107,9 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
-        
-        if (eventH.spacePressed) {
+        player.update(); // player update -> sprite + movement
+
+        if (eventH.spacePressed) { // key listener in Space Impact panel
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastBulletTime >= bulletInterval) {
                 bullets.add(new Bullet(this, player));
@@ -118,7 +117,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
     
-        // virus update priority 
+        // virus update *priority*
         for (int i = compViruses.size() - 1; i >= 0; i--) {
             ComputerVirus cv = compViruses.get(i);
             cv.update();
@@ -142,23 +141,22 @@ public class SpaceImpact extends JPanel implements Runnable {
             for (int j = compViruses.size() - 1; j >= 0; j--) {
                 ComputerVirus cv = compViruses.get(j);
                 
-                // if collission is detected
+                // collission check for bullet and computer virus
                 if (detectCollission(b, cv) && !bulletUsed) {
                     bullets.remove(i);
                     compViruses.remove(j);
                     bulletUsed = true;
                     currentScore += scorePlus;
                     
-                    // null checking for best practices
-                    if (display != null) {
+                    if (display != null) { // null checking for best practices
                         display.setCurrentScore(currentScore);
                     }
                     break;
                 }
             }
             
-            // adware bullet collission
-            if(detectCollission(b, adware) && !bulletUsed) {
+            // collission check for bullet and adware
+            if(detectCollission(b, adware) && !bulletUsed && adware.getAdwareHealth() > 0) {
                 bullets.remove(i);
                 adware.setAdwareHealth();
                 bulletUsed = true;
@@ -169,55 +167,48 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
 
+        // update this logic for boss appearance, wave 1
         if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
             adware.update();
-            display.setGamePlayStatus("Boss Level, Wave 1");
+            // display.setGamePlayStatus("Boss Level, Wave 1");
         }
-
     }
-
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g; 
 
-        /* ImageIcon
-            paints Icons from Images
-            Images that are created from a URL, filename or byte array are preloaded using MediaTracker to monitor the loaded state of the image.
-            
-            Arguments/Parameters
-            c - the component to be used as the observer if this icon has no image observer
-            g - the graphics context
-            x - the X coordinate of the icon's top-left corner
-            y - the Y coordinate of the icon's top-left corner
-        */
+        // paints background icon
         if (background != null) {
             background.paintIcon(this, g2D, 0, 0);
         }
         
-        draw(g2D);
+        draw(g2D); // draw in Space Impact Panel
 
+        player.draw(g2D); // draws Player icon
+
+        // draws computer viruses from ArrayList
         for(ComputerVirus i : compViruses) {
             i.draw(g2D);
         }
 
-        player.draw(g2D);
-        
-        // draw bullets
+        // draws bullets viruses from ArrayList
         for(Bullet i : bullets) {
             i.draw(g2D);
         }
 
-        // Draw Wave 1 Elements
+        // draw wave 1 Elements
         if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
+            System.out.print(adware.getAdwareHealth());
             adware.draw(g2D);
         }
+        else {
+            System.out.println("Hello, world");
+        }
         
-
         g2D.dispose();        
     }
 
-    // temporary grid for the panel
     public void draw(Graphics2D g2D) {
         g2D.setColor(Color.BLACK); 
         for(int i = 0; i <= columns; i++) {
@@ -226,9 +217,21 @@ public class SpaceImpact extends JPanel implements Runnable {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
-        
-        // g2D.setColor(new Color(25,32,38));
-        // g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
+    }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSFX(int i) {
+        sound.setFile(i);
+        sound.play();
     }
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU

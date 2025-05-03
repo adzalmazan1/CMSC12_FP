@@ -17,6 +17,9 @@ public class Life extends Entity implements Deployable {
     public void setDefaultValues() {
         x = spaceImpact.tileSize;
         y = spaceImpact.tileSize / 2;
+
+        width = spaceImpact.tileSize;
+        height = spaceImpact.tileSize;
     }
 
     @Override
@@ -31,6 +34,6 @@ public class Life extends Entity implements Deployable {
 
     public void draw(Graphics2D g2D, int index) {
         BufferedImage img = defaultImg;
-        g2D.drawImage(img, x * (2 * index + 1), y, spaceImpact.tileSize, spaceImpact.tileSize, null);
+        g2D.drawImage(img, x * (2 * index + 1), y, width, height, null);
     }
 }

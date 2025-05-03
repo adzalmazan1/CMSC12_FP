@@ -8,8 +8,7 @@ import javax.imageio.ImageIO;
 public class Adware extends Entity implements Deployable {
     private SpaceImpact spaceImpact;
 
-    private boolean movingDown = true;
-    private boolean isTerminated = false;
+    private boolean movingDown;
 
     private int yUpper; 
     private int yLower;
@@ -19,7 +18,6 @@ public class Adware extends Entity implements Deployable {
 
     public Adware(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
-        
         setDefaultValues();
         loadImage();
     }
@@ -34,6 +32,8 @@ public class Adware extends Entity implements Deployable {
 
         speed = 8;
         movementChange = 5;
+
+        movingDown = true;
 
         yUpper = spaceImpact.tileSize * 2;
         yLower = spaceImpact.screenHeight - (spaceImpact.tileSize * 7);
@@ -65,8 +65,6 @@ public class Adware extends Entity implements Deployable {
             }
             movementCounter = 0;
         }
-
-
     }
 
     public void draw(Graphics2D g2D) {
@@ -79,17 +77,12 @@ public class Adware extends Entity implements Deployable {
         g2D.drawImage(img, x, y, width, height, null);
     }
 
+    // getters and setters here
     public int getAdwareHealth() {
         return healthWidth;
     }
 
-    public boolean isTerminated() {
-        return isTerminated;
-    }
-
     public void setAdwareHealth() {
         healthWidth -= 10;
-        System.out.println("Adware hit! New health width: " + healthWidth);
     }
-    
 }
