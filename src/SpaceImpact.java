@@ -199,11 +199,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
         // draw wave 1 Elements
         if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
-            System.out.print(adware.getAdwareHealth());
             adware.draw(g2D);
-        }
-        else {
-            System.out.println("Hello, world");
         }
         
         g2D.dispose();        

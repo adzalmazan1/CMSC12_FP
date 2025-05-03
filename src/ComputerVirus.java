@@ -27,8 +27,8 @@ public class ComputerVirus extends Entity implements Deployable {
         direction = "up";
         speed = 50;
 
-        width = spaceImpact.tileSize + 10;
-        height = (spaceImpact.tileSize / 2) + 10;
+        width = spaceImpact.tileSize + 8;
+        height = (spaceImpact.tileSize / 2) + 8;
 
         frameChange = 20;
         movementChange = 60; // (1 sec, 1 movement)
