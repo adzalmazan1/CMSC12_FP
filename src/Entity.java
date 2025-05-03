@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 
 public class Entity {
     protected int x, y;
+    protected int width, height; // new additionk
     protected double speed;
     
     protected BufferedImage defaultImg, up, down, left, right; // animation purposes

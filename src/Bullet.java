@@ -20,8 +20,12 @@ public class Bullet extends Entity implements Deployable {
 
     // bullet default values
     public void setDefaultValues() {
-        x = player.x + (spaceImpact.tileSize  * 4);
-        y = player.y + 20;
+        x = player.x + (spaceImpact.tileSize  * 3);
+        y = player.y + 18;
+
+        width = (spaceImpact.tileSize / 2) + 5;
+        height = (spaceImpact.tileSize / 4) + 5;
+
         speed = 50;
     }
 
@@ -49,6 +53,6 @@ public class Bullet extends Entity implements Deployable {
     public void draw(Graphics2D g2D) {
         // default image for bullet
         BufferedImage img = defaultImg;
-        g2D.drawImage(img, x, y, (spaceImpact.tileSize / 2) + 7, (spaceImpact.tileSize / 4) + 7, null); // uses SpaceImpact
+        g2D.drawImage(img, x, y, width, height, null); // uses SpaceImpact
     }
 }

@@ -81,4 +81,8 @@ public class SpaceImpactDisplay extends JPanel {
     public void setGamePlayStatus(String gpStat) {
         statusLabel.setText(gpStat);
     }
+
+    public void setLifeCount() {
+       // To do 
+    }
 }

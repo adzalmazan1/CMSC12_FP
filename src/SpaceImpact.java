@@ -8,33 +8,44 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class SpaceImpact extends JPanel implements Runnable {
+    // Variables for the dimensions
     protected final int tileSize = 35, rows = 16, columns = 25;
     protected final int screenWidth = columns * tileSize, screenHeight = rows * tileSize;
 
+    // Display
     private ImageIcon background = new ImageIcon(getClass().getResource("img/gameBackground.gif")); // background animation for SpaceImpact Panel 
-    private int FPS = 60;
+    private SpaceImpactDisplay display;
 
-    // moved spawn deets here
+    // Game FPS
+    private int FPS = 60;
+    private Thread gameThread;
+
+    // Computer virus/normals spawn time
     private long lastSpawnTime = System.currentTimeMillis();
     private int spawnInterval = 2000;
 
+    // To do: update spawnInterval / give it a multiplier depending on what wave you're in
+
+    // Bullet spawn tile
     private long lastBulletTime = System.currentTimeMillis();
     private int bulletInterval = 500;
     
+    // Scoring system variables
     private int currentScore = 0;
     private int scorePlus = 50;
 
-    private int[] enterWaveScore = {200, 2000, 3000};
+    // Waves quota
+    private int[] enterWaveScore = {0, 2000, 3000};
 
-    private Thread gameThread;
-    private EventHandler eventH;
-
-    // have to check for collission
+    // Array Lists
     private ArrayList<ComputerVirus> compViruses;
     private ArrayList<Bullet> bullets; 
     
+    // Player and event handler
     private Player player;
-    private SpaceImpactDisplay display;
+    private EventHandler eventH;
+
+    // Bosses declaration
     private Adware adware;
 
     public SpaceImpact(SpaceImpactDisplay display) {
@@ -132,7 +143,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 ComputerVirus cv = compViruses.get(j);
                 
                 // if collission is detected
-                if (detectCollission(cv, b)) {
+                if (detectCollission(b, cv) && !bulletUsed) {
                     bullets.remove(i);
                     compViruses.remove(j);
                     bulletUsed = true;
@@ -144,21 +155,27 @@ public class SpaceImpact extends JPanel implements Runnable {
                     }
                     break;
                 }
-            }            
-            if (bulletUsed) {
-                // breaks out from bullet update loop when bullet is used
+            }
+            
+            // adware bullet collission
+            if(detectCollission(b, adware) && !bulletUsed) {
+                bullets.remove(i);
+                adware.setAdwareHealth();
+                bulletUsed = true;
+            }
+            
+            if (bulletUsed) { // one bullet one virus ratio
                 break;
             }
         }
 
-        // Updating the game's current status
-        if(currentScore == enterWaveScore[0]) {
-            // Modify the text yet
+        if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
             adware.update();
             display.setGamePlayStatus("Boss Level, Wave 1");
         }
 
     }
+
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -192,9 +209,10 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
 
         // Draw Wave 1 Elements
-        if(currentScore == enterWaveScore[0]) {
+        if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
             adware.draw(g2D);
         }
+        
 
         g2D.dispose();        
     }
@@ -208,16 +226,35 @@ public class SpaceImpact extends JPanel implements Runnable {
                 g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
             }
         }
-  
+        
         // g2D.setColor(new Color(25,32,38));
         // g2D.fillRect(0, 0, columns * tileSize, 2 * tileSize);
     }
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
-    public boolean detectCollission(ComputerVirus a, Bullet b) {
-        return a.x < b.x + ((tileSize / 2) + 12) &&
-        a.x + tileSize + 10 > b.x &&
-        a.y < b.y + ((tileSize / 4) + 12) &&
-        a.y + tileSize + 10 > b.y;
+    public boolean detectCollission(Bullet a, ComputerVirus b) {
+        return a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+    }
+
+    public boolean detectCollission(Bullet a, Adware b) {
+        int hitboxOffsetX = tileSize * 2; 
+        int adjustedX = b.x + hitboxOffsetX;
+        int adjustedWidth = b.width - hitboxOffsetX;
+    
+        return a.x < adjustedX + adjustedWidth &&
+               a.x + a.width > adjustedX &&
+               a.y < b.y + b.height &&
+               a.y + a.height > b.y;
     }
 }
+
+/* 
+Collission Logic
+ * return a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+*/

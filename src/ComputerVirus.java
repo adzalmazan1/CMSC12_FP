@@ -27,6 +27,9 @@ public class ComputerVirus extends Entity implements Deployable {
         direction = "up";
         speed = 50;
 
+        width = spaceImpact.tileSize + 10;
+        height = (spaceImpact.tileSize / 2) + 10;
+
         frameChange = 20;
         movementChange = 60; // (1 sec, 1 movement)
     }
@@ -93,7 +96,7 @@ public class ComputerVirus extends Entity implements Deployable {
         } 
         // height tile/2 = 50, orig ratio = 55
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
-        g2D.drawImage(img, x, y, spaceImpact.tileSize + 12, (spaceImpact.tileSize / 2) + 12, null);
+        g2D.drawImage(img, x, y, width, height, null);
     }
 }
 

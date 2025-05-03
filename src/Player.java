@@ -9,7 +9,6 @@ public class Player extends Entity implements Deployable {
     private EventHandler eventH;
 
     private BufferedImage defaultImg2;
-    private int playerDimension;
 
     public Player(SpaceImpact spaceImpact, EventHandler eventH) {
         this.spaceImpact = spaceImpact;
@@ -20,13 +19,15 @@ public class Player extends Entity implements Deployable {
     }
 
     public void setDefaultValues() {
-        playerDimension = spaceImpact.tileSize * 3;
         x = spaceImpact.tileSize;
         y = 3 * spaceImpact.tileSize;
+
+        width = spaceImpact.tileSize * 3;
+        height = spaceImpact.tileSize * 3;
+
         direction = "def";
         speed = 5;
         frameChange = 35;
-        // out of bounds
     }
 
     public void loadImage() {
@@ -62,7 +63,7 @@ public class Player extends Entity implements Deployable {
                 direction = "up";
                 y -= speed;
             }
-            else if(eventH.downPressed &&  y + speed < spaceImpact.screenHeight - playerDimension) {
+            else if(eventH.downPressed &&  y + speed < spaceImpact.screenHeight - height) {
                 direction = "down";
                 y += speed;
             }
@@ -70,7 +71,7 @@ public class Player extends Entity implements Deployable {
                 direction = "left";
                 x -= speed;
             }
-            else if(eventH.rightPressed && x + speed < spaceImpact.screenWidth - playerDimension) {
+            else if(eventH.rightPressed && x + speed < spaceImpact.screenWidth - width) {
                 direction = "right";
                 x += speed;
             }
@@ -109,6 +110,6 @@ public class Player extends Entity implements Deployable {
                 break;
         }
 
-        g2D.drawImage(img, x, y, playerDimension, playerDimension, null);
+        g2D.drawImage(img, x, y, width, height, null);
     }
 }
