@@ -40,7 +40,6 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Array Lists
     protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
     protected CopyOnWriteArrayList<Bullet> bullets; 
-    // protected ArrayList<ComputerVirus> compViruses;
     
     // Player and event handler
     private Player player;
@@ -59,7 +58,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.bullets =  new CopyOnWriteArrayList<Bullet>();
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
-        this.anon = new Anonymous(this);
+        this.anon = new Anonymous(this, player);
         this.trojan = new Trojan(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
