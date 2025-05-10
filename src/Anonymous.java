@@ -64,21 +64,26 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {    
+        /* 
         int centerX = player.x + player.width / 2;
         int centerY = player.y + player.height / 2;
 
         int radius = 150; 
-        int virusCount = Math.min(spaceImpact.compViruses.size() - 1, 8); // Only teleport up to 8 viruses
+        int numEnemies = 5;
 
-        for (int i = 0; i < virusCount; i++) {
-            ComputerVirus virus = spaceImpact.compViruses.get(i);
-            double angle = 2 * Math.PI * i / virusCount;
+        for (int i = 0; i < numEnemies; i++) {
+            ComputerVirus virus = new ComputerVirus(spaceImpact);
+            double angle = 2 * Math.PI * i / numEnemies;
 
-            int newX = (int) (centerX + radius * Math.cos(angle)) - virus.width / 2;
-            int newY = (int) (centerY + radius * Math.sin(angle)) - virus.height / 2;
+            int virusX = (int)(centerX + radius * Math.cos(angle));
+            int virusY = (int)(centerY + radius * Math.sin(angle));
 
-            virus.x = newX;
-            virus.y = newY;
+            virus.x = virusX;
+            virus.y = virusY;
+
+            System.out.println("This line of code executes");
+            spaceImpact.compViruses.add(virus);
         }
+        */
     }
 }
