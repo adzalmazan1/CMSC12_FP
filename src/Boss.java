@@ -3,7 +3,7 @@ public class Boss extends Entity implements Deployable {
     protected int healthHeight;
 
     protected int deployCounter = 0;
-    protected int deployChange = 300;
+    protected int deployChange = 420;
 
     // getters and setters here
     public int getHealth() {

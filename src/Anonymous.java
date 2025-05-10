@@ -68,7 +68,7 @@ public class Anonymous extends Boss {
         int centerY = player.y + player.height / 2;
 
         int radius = 150; 
-        int virusCount = Math.min(spaceImpact.compViruses.size(), 8); // Only teleport up to 8 viruses
+        int virusCount = Math.min(spaceImpact.compViruses.size() - 1, 8); // Only teleport up to 8 viruses
 
         for (int i = 0; i < virusCount; i++) {
             ComputerVirus virus = spaceImpact.compViruses.get(i);
