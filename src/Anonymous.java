@@ -5,13 +5,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Adware extends Boss implements Deployable {
+public class Anonymous extends Boss implements Deployable {
     private SpaceImpact spaceImpact;
 
-    private int yUpper; 
-    private int yLower;
-
-    public Adware(SpaceImpact spaceImpact) {
+    public Anonymous(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
         setDefaultValues();
         loadImage();
@@ -20,16 +17,13 @@ public class Adware extends Boss implements Deployable {
     @Override
     public void setDefaultValues() {
         x = spaceImpact.screenWidth - spaceImpact.tileSize * 7;
-        y = spaceImpact.tileSize * 2;
+        y = spaceImpact.tileSize * 5;
         
         width = spaceImpact.tileSize * 7;
         height = spaceImpact.tileSize * 7;
 
         speed = 8;
         movementChange = 5;
-
-        yUpper = spaceImpact.tileSize * 2;
-        yLower = spaceImpact.screenHeight - (spaceImpact.tileSize * 7);
 
         // health width and height ** separate attributes **
         healthWidth = spaceImpact.tileSize * 5;
@@ -39,22 +33,14 @@ public class Adware extends Boss implements Deployable {
     @Override
     public void loadImage() {
         try {
-            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/adware.png")); 
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/anonymous.png")); 
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
     public void update() {
-        movementCounter++;
-        if(movementCounter >= movementChange) {
-            y += speed;
-            if(y >= yLower || y <= yUpper) {
-                outOfBounds = true;
-                speed = -speed;
-            }
-            movementCounter = 0;
-        }
+        // no movement update
     }
 
     public void draw(Graphics2D g2D) {

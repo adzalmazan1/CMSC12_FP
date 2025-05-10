@@ -35,7 +35,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int scorePlus = 50;
 
     // Waves quota
-    private int[] enterWaveScore = {0, 2000, 3000};
+    private int[] enterWaveScore = {0, 200, 300};
 
     // Array Lists
     private ArrayList<ComputerVirus> compViruses;
@@ -48,6 +48,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Bosses declaration
     private Adware adware;
+    private Anonymous anon;
 
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
@@ -56,6 +57,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.bullets = new ArrayList<Bullet>();
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
+        this.anon = new Anonymous(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -156,19 +158,26 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
             
             // collission check for bullet and adware
-            if(detectCollission(b, adware) && !bulletUsed && adware.getAdwareHealth() > 0) {
+            if(detectCollission(b, adware) && !bulletUsed && adware.getHealth() > 0) {
                 bullets.remove(i);
-                adware.setAdwareHealth();
+                adware.setHealth();
+                bulletUsed = true;
+            }
+
+            // collission check for bullet and anonymous
+            if(detectCollission(b, anon) && !bulletUsed && anon.getHealth() > 0) {
+                bullets.remove(i);
+                anon.setHealth();
                 bulletUsed = true;
             }
             
-            if (bulletUsed) { // one bullet one virus ratio
+            if (bulletUsed) { // one bullet one enemy ratio
                 break;
             }
         }
 
         // update this logic for boss appearance, wave 1
-        if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.update();
             // display.setGamePlayStatus("Boss Level, Wave 1");
         }
@@ -197,9 +206,12 @@ public class SpaceImpact extends JPanel implements Runnable {
             i.draw(g2D);
         }
 
-        // draw wave 1 Elements
-        if(currentScore >= enterWaveScore[0] && adware.getAdwareHealth() > 0) {
+        // draw wave[0] elements here
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.draw(g2D);
+        }
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0) {
+            anon.draw(g2D);
         }
         
         g2D.dispose();        
@@ -214,7 +226,8 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
     }
-
+    
+    // To do -> music part
     public void playMusic(int i) {
         sound.setFile(i);
         sound.play();
@@ -239,6 +252,17 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public boolean detectCollission(Bullet a, Adware b) {
+        int hitboxOffsetX = tileSize * 2; 
+        int adjustedX = b.x + hitboxOffsetX;
+        int adjustedWidth = b.width - hitboxOffsetX;
+    
+        return a.x < adjustedX + adjustedWidth &&
+               a.x + a.width > adjustedX &&
+               a.y < b.y + b.height &&
+               a.y + a.height > b.y;
+    }
+
+    public boolean detectCollission(Bullet a, Anonymous b) {
         int hitboxOffsetX = tileSize * 2; 
         int adjustedX = b.x + hitboxOffsetX;
         int adjustedWidth = b.width - hitboxOffsetX;

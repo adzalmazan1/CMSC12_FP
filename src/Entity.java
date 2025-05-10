@@ -1,12 +1,14 @@
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    protected int x, y;
-    protected int width, height; // new additionk
-    protected double speed;
+    protected int x, y; // x and y coords
+    protected int width, height; // image width and height
+    protected double speed; // movement speed
     
-    protected BufferedImage defaultImg, up, down, left, right; // animation purposes
-    protected String direction;
+    // animation purposes
+    protected BufferedImage defaultImg, up, down, left, right;
+    protected String direction; 
+
     protected boolean outOfBounds = false;
 
     protected int frameCounter = 0;
