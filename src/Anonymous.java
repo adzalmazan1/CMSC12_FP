@@ -41,6 +41,11 @@ public class Anonymous extends Boss {
 
     public void update() {
         // no movement update
+        deployCounter++;
+        if(deployCounter >= deployChange) {
+            addSpawn();
+            deployCounter = 0;
+        }
     }
 
     public void draw(Graphics2D g2D) {
@@ -54,4 +59,12 @@ public class Anonymous extends Boss {
         BufferedImage img = defaultImg;
         g2D.drawImage(img, x, y, width, height, null);
     }
+
+    @Override
+    public void addSpawn() {
+    }
 }
+
+/* 
+ * 
+*/

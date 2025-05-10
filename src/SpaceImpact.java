@@ -2,8 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -39,8 +38,9 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int[] enterWaveScore = {0, 200, 300};
 
     // Array Lists
-    protected ArrayList<ComputerVirus> compViruses;
-    private ArrayList<Bullet> bullets; 
+    protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
+    protected CopyOnWriteArrayList<Bullet> bullets; 
+    // protected ArrayList<ComputerVirus> compViruses;
     
     // Player and event handler
     private Player player;
@@ -55,8 +55,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
         this.eventH = new EventHandler();
-        this.compViruses = new ArrayList<ComputerVirus>();
-        this.bullets = new ArrayList<Bullet>();
+        this.compViruses = new CopyOnWriteArrayList<ComputerVirus>();
+        this.bullets =  new CopyOnWriteArrayList<Bullet>();
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
         this.anon = new Anonymous(this);
@@ -122,40 +122,38 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
     
-        // remove viruses that are out of bounds using Iterator
-        Iterator<ComputerVirus> virusIterator = compViruses.iterator();
-        while (virusIterator.hasNext()) {
-            ComputerVirus cv = virusIterator.next();
+        // virus update *priority*
+        for (int i = compViruses.size() - 1; i >= 0; i--) {
+            ComputerVirus cv = compViruses.get(i);
             cv.update();
             if (cv.outOfBounds) {
-                virusIterator.remove(); // Remove virus safely
+                compViruses.remove(i);
             }
         }
     
-        // remove bullets that are out of bounds or hit viruses using Iterator
-        Iterator<Bullet> bulletIterator = bullets.iterator();
-        while (bulletIterator.hasNext()) {
-            Bullet b = bulletIterator.next();
+        // bullet update 
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
             b.update();
     
             if (b.outOfBounds) {
-                bulletIterator.remove(); // Remove bullet safely
+                bullets.remove(i);
                 continue;
             }
     
             boolean bulletUsed = false;
-            
-            // Check for collision with viruses
-            Iterator<ComputerVirus> virusCollisionIterator = compViruses.iterator();
-            while (virusCollisionIterator.hasNext()) {
-                ComputerVirus cv = virusCollisionIterator.next();
+    
+            for (int j = compViruses.size() - 1; j >= 0; j--) {
+                ComputerVirus cv = compViruses.get(j);
+                
+                // collission check for bullet and computer virus
                 if (detectCollission(b, cv) && !bulletUsed) {
-                    bulletIterator.remove(); // Remove bullet safely
-                    virusCollisionIterator.remove(); // Remove virus safely
+                    bullets.remove(i);
+                    compViruses.remove(j);
                     bulletUsed = true;
                     currentScore += scorePlus;
-    
-                    if (display != null) {
+                    
+                    if (display != null) { // null checking for best practices
                         display.setCurrentScore(currentScore);
                     }
                     break;
@@ -164,17 +162,17 @@ public class SpaceImpact extends JPanel implements Runnable {
     
             // Check for collision with adware or other enemies
             if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() >= 0) {
-                bulletIterator.remove(); // Remove bullet safely
+                bullets.remove(i); 
                 adware.setHealth();
                 bulletUsed = true;
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-                bulletIterator.remove(); // Remove bullet safely
+                bullets.remove(i); 
                 anon.setHealth();
                 bulletUsed = true;
             }
             else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 3) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
-                bulletIterator.remove(); // Remove bullet safely
+                bullets.remove(i);
                 trojan.setHealth();
                 bulletUsed = true;
             }
@@ -208,17 +206,13 @@ public class SpaceImpact extends JPanel implements Runnable {
         draw(g2D); // Draw in Space Impact Panel
         player.draw(g2D); // Draw Player icon
     
-        // Draw viruses using Iterator
-        Iterator<ComputerVirus> virusIterator = compViruses.iterator();
-        while (virusIterator.hasNext()) {
-            ComputerVirus i = virusIterator.next();
+        // draws computer viruses from ArrayList
+        for(ComputerVirus i : compViruses) {
             i.draw(g2D);
         }
-    
-        // Draw bullets using Iterator
-        Iterator<Bullet> bulletIterator = bullets.iterator();
-        while (bulletIterator.hasNext()) {
-            Bullet i = bulletIterator.next();
+
+        // draws bullets viruses from ArrayList
+        for(Bullet i : bullets) {
             i.draw(g2D);
         }
     

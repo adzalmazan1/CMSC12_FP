@@ -28,8 +28,6 @@ public class Adware extends Boss {
         speed = 8;
         movementChange = 5;
 
-        deployChange = 2400; // 2400 frames
-
         yUpper = spaceImpact.tileSize * 2;
         yLower = spaceImpact.screenHeight - (spaceImpact.tileSize * 7);
 
@@ -77,6 +75,7 @@ public class Adware extends Boss {
         g2D.drawImage(img, x, y, width, height, null);
     }
 
+    @Override
     public void addSpawn() {
         int numEnemies = 5;
         double angleStep = 2 * Math.PI / numEnemies;
