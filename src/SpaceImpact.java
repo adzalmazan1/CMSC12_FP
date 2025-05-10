@@ -49,6 +49,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Bosses declaration
     private Adware adware;
     private Anonymous anon;
+    private Trojan trojan;
 
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
@@ -58,6 +59,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
         this.anon = new Anonymous(this);
+        this.trojan = new Trojan(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -158,31 +160,42 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
             
             // collission check for bullet and adware
-            if(detectCollission(b, adware) && !bulletUsed && adware.getHealth() >= 0) {
+            if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() >= 0) {
                 bullets.remove(i);
                 adware.setHealth();
                 bulletUsed = true;
             }
-            else if(detectCollission(b, anon) && !bulletUsed && anon.getHealth() >= 0 && adware.getHealth() <= 0) {
-                System.out.println("Collission detected bullet and anon. Health: " + anon.getHealth());
+            else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i);
                 anon.setHealth();
                 bulletUsed = true;
+                System.out.println("Anon collission executing");
             }
-            
+            else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 7) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+                bullets.remove(i);
+                trojan.setHealth();
+                bulletUsed = true;
+                System.out.println("Trojan collission executing");
+            }
+
             if (bulletUsed) { // one bullet one enemy ratio
                 break;
             }
         }
 
         // update this logic for boss appearance, wave 1
-        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
+        if(currentScore >= enterWaveScore[0] &&  adware.getHealth() > 0) {
             adware.update();
             // display.setGamePlayStatus("Boss Level, Wave 1");
             // have to kill adware to proceed to else if statement
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0){
             anon.update();
+            // System.out.println("Anon update executing");
+        }
+        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+            trojan.update();
+            // System.out.println("Trojan draw executing");
         }
     }
 
@@ -210,14 +223,20 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
 
         // draw wave[0] elements here
-        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
             adware.draw(g2D);
         }
         // draw wave[1] elements here
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-            System.out.println("Executing");
             anon.draw(g2D);
+            // System.out.println("Anon draw executing");
         }
+        // draw wave[2] elements here
+        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+            trojan.draw(g2D);
+            // System.out.println("Trojan draw executing");
+        }
+        
         
         g2D.dispose();        
     }
@@ -256,8 +275,8 @@ public class SpaceImpact extends JPanel implements Runnable {
         a.y + a.height > b.y;
     }
 
-    public boolean detectCollission(Bullet a, Adware b) {
-        int hitboxOffsetX = tileSize * 2; 
+    public boolean detectCollission(Bullet a, Boss b, int offSetMult) {
+        int hitboxOffsetX = tileSize * offSetMult; 
         int adjustedX = b.x + hitboxOffsetX;
         int adjustedWidth = b.width - hitboxOffsetX;
     
@@ -265,11 +284,6 @@ public class SpaceImpact extends JPanel implements Runnable {
                a.x + a.width > adjustedX &&
                a.y < b.y + b.height &&
                a.y + a.height > b.y;
-    }
-
-    public boolean detectCollission(Bullet a, Anonymous b) {
-        // fix collission logic
-        return false;
     }
 }
 

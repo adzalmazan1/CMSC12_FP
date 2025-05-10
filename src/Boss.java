@@ -8,6 +8,6 @@ public class Boss extends Entity {
     }
 
     public void setHealth() {
-        healthWidth -= 5;
+        healthWidth -= 50;
     }
 }
