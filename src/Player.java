@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -83,6 +84,9 @@ public class Player extends Entity implements Deployable {
 
     // currently uses default image only
     public void draw(Graphics2D g2D) {
+        g2D.setColor(Color.RED);
+        g2D.drawRect(x, y, width, height);
+
         // draw player
         BufferedImage img = null;
         switch (direction) {

@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -86,6 +87,9 @@ public class ComputerVirus extends Entity implements Deployable {
     }
 
     public void draw(Graphics2D g2D) {
+        g2D.setColor(Color.RED);
+        g2D.drawRect(x, y, width, height);
+
         BufferedImage img = null;
         switch (direction) {
             case "up":

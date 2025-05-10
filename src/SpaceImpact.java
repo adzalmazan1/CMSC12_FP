@@ -158,14 +158,13 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
             
             // collission check for bullet and adware
-            if(detectCollission(b, adware) && !bulletUsed && adware.getHealth() > 0) {
+            if(detectCollission(b, adware) && !bulletUsed && adware.getHealth() >= 0) {
                 bullets.remove(i);
                 adware.setHealth();
                 bulletUsed = true;
             }
-
-            // collission check for bullet and anonymous
-            if(detectCollission(b, anon) && !bulletUsed && anon.getHealth() > 0) {
+            else if(detectCollission(b, anon) && !bulletUsed && anon.getHealth() >= 0 && adware.getHealth() <= 0) {
+                System.out.println("Collission detected bullet and anon. Health: " + anon.getHealth());
                 bullets.remove(i);
                 anon.setHealth();
                 bulletUsed = true;
@@ -180,6 +179,10 @@ public class SpaceImpact extends JPanel implements Runnable {
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.update();
             // display.setGamePlayStatus("Boss Level, Wave 1");
+            // have to kill adware to proceed to else if statement
+        }
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0){
+            anon.update();
         }
     }
 
@@ -210,7 +213,9 @@ public class SpaceImpact extends JPanel implements Runnable {
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.draw(g2D);
         }
-        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0) {
+        // draw wave[1] elements here
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+            System.out.println("Executing");
             anon.draw(g2D);
         }
         
@@ -263,14 +268,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     public boolean detectCollission(Bullet a, Anonymous b) {
-        int hitboxOffsetX = tileSize * 2; 
-        int adjustedX = b.x + hitboxOffsetX;
-        int adjustedWidth = b.width - hitboxOffsetX;
-    
-        return a.x < adjustedX + adjustedWidth &&
-               a.x + a.width > adjustedX &&
-               a.y < b.y + b.height &&
-               a.y + a.height > b.y;
+        // fix collission logic
+        return false;
     }
 }
 

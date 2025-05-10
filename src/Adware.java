@@ -62,6 +62,8 @@ public class Adware extends Boss implements Deployable {
         g2D.setColor(Color.RED);
         g2D.fill3DRect(x + (spaceImpact.tileSize * 2), y - 10, healthWidth, healthHeight, true);
         
+        g2D.drawRect(x, y, width, height);
+
         // boss image
         BufferedImage img = defaultImg;
         g2D.drawImage(img, x, y, width, height, null);
