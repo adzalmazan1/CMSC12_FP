@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -38,7 +39,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int[] enterWaveScore = {0, 200, 300};
 
     // Array Lists
-    private ArrayList<ComputerVirus> compViruses;
+    protected ArrayList<ComputerVirus> compViruses;
     private ArrayList<Bullet> bullets; 
     
     // Player and event handler
@@ -112,7 +113,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public void update() {
         player.update(); // player update -> sprite + movement
-
+    
         if (eventH.spacePressed) { // key listener in Space Impact panel
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastBulletTime >= bulletInterval) {
@@ -121,126 +122,120 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
     
-        // virus update *priority*
-        for (int i = compViruses.size() - 1; i >= 0; i--) {
-            ComputerVirus cv = compViruses.get(i);
+        // remove viruses that are out of bounds using Iterator
+        Iterator<ComputerVirus> virusIterator = compViruses.iterator();
+        while (virusIterator.hasNext()) {
+            ComputerVirus cv = virusIterator.next();
             cv.update();
             if (cv.outOfBounds) {
-                compViruses.remove(i);
+                virusIterator.remove(); // Remove virus safely
             }
         }
     
-        // bullet update 
-        for (int i = bullets.size() - 1; i >= 0; i--) {
-            Bullet b = bullets.get(i);
+        // remove bullets that are out of bounds or hit viruses using Iterator
+        Iterator<Bullet> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            Bullet b = bulletIterator.next();
             b.update();
     
             if (b.outOfBounds) {
-                bullets.remove(i);
+                bulletIterator.remove(); // Remove bullet safely
                 continue;
             }
     
             boolean bulletUsed = false;
-    
-            for (int j = compViruses.size() - 1; j >= 0; j--) {
-                ComputerVirus cv = compViruses.get(j);
-                
-                // collission check for bullet and computer virus
+            
+            // Check for collision with viruses
+            Iterator<ComputerVirus> virusCollisionIterator = compViruses.iterator();
+            while (virusCollisionIterator.hasNext()) {
+                ComputerVirus cv = virusCollisionIterator.next();
                 if (detectCollission(b, cv) && !bulletUsed) {
-                    bullets.remove(i);
-                    compViruses.remove(j);
+                    bulletIterator.remove(); // Remove bullet safely
+                    virusCollisionIterator.remove(); // Remove virus safely
                     bulletUsed = true;
                     currentScore += scorePlus;
-                    
-                    if (display != null) { // null checking for best practices
+    
+                    if (display != null) {
                         display.setCurrentScore(currentScore);
                     }
                     break;
                 }
             }
-            
-            // collission check for bullet and adware
+    
+            // Check for collision with adware or other enemies
             if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() >= 0) {
-                bullets.remove(i);
+                bulletIterator.remove(); // Remove bullet safely
                 adware.setHealth();
                 bulletUsed = true;
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-                bullets.remove(i);
+                bulletIterator.remove(); // Remove bullet safely
                 anon.setHealth();
                 bulletUsed = true;
-                System.out.println("Anon collission executing");
             }
-            else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 7) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
-                bullets.remove(i);
+            else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 3) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+                bulletIterator.remove(); // Remove bullet safely
                 trojan.setHealth();
                 bulletUsed = true;
-                System.out.println("Trojan collission executing");
             }
-
-            if (bulletUsed) { // one bullet one enemy ratio
+    
+            if (bulletUsed) {
                 break;
             }
         }
-
-        // update this logic for boss appearance, wave 1
-        if(currentScore >= enterWaveScore[0] &&  adware.getHealth() > 0) {
+    
+        // Update boss appearance and health checks for different waves
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.update();
-            // display.setGamePlayStatus("Boss Level, Wave 1");
-            // have to kill adware to proceed to else if statement
         }
-        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0){
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             anon.update();
-            // System.out.println("Anon update executing");
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             trojan.update();
-            // System.out.println("Trojan draw executing");
         }
     }
-
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g; 
-
-        // paints background icon
+        Graphics2D g2D = (Graphics2D) g;
+    
+        // Paint background
         if (background != null) {
             background.paintIcon(this, g2D, 0, 0);
         }
-        
-        draw(g2D); // draw in Space Impact Panel
-
-        player.draw(g2D); // draws Player icon
-
-        // draws computer viruses from ArrayList
-        for(ComputerVirus i : compViruses) {
+    
+        draw(g2D); // Draw in Space Impact Panel
+        player.draw(g2D); // Draw Player icon
+    
+        // Draw viruses using Iterator
+        Iterator<ComputerVirus> virusIterator = compViruses.iterator();
+        while (virusIterator.hasNext()) {
+            ComputerVirus i = virusIterator.next();
             i.draw(g2D);
         }
-
-        // draws bullets viruses from ArrayList
-        for(Bullet i : bullets) {
+    
+        // Draw bullets using Iterator
+        Iterator<Bullet> bulletIterator = bullets.iterator();
+        while (bulletIterator.hasNext()) {
+            Bullet i = bulletIterator.next();
             i.draw(g2D);
         }
-
-        // draw wave[0] elements here
+    
+        // Draw wave elements based on score
         if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
             adware.draw(g2D);
         }
-        // draw wave[1] elements here
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             anon.draw(g2D);
-            // System.out.println("Anon draw executing");
         }
-        // draw wave[2] elements here
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             trojan.draw(g2D);
-            // System.out.println("Trojan draw executing");
         }
-        
-        
-        g2D.dispose();        
+    
+        g2D.dispose();
     }
-
+    
     public void draw(Graphics2D g2D) {
         g2D.setColor(Color.BLACK); 
         for(int i = 0; i <= columns; i++) {

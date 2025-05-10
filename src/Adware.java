@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Adware extends Boss implements Deployable {
+public class Adware extends Boss {
     private SpaceImpact spaceImpact;
 
     private int yUpper; 
@@ -27,6 +27,8 @@ public class Adware extends Boss implements Deployable {
 
         speed = 8;
         movementChange = 5;
+
+        deployChange = 2400; // 2400 frames
 
         yUpper = spaceImpact.tileSize * 2;
         yLower = spaceImpact.screenHeight - (spaceImpact.tileSize * 7);
@@ -55,6 +57,12 @@ public class Adware extends Boss implements Deployable {
             }
             movementCounter = 0;
         }
+
+        deployCounter++;
+        if(deployCounter >= deployChange) {
+            addSpawn();
+            deployCounter = 0;
+        }
     }
 
     public void draw(Graphics2D g2D) {
@@ -67,5 +75,27 @@ public class Adware extends Boss implements Deployable {
         // boss image
         BufferedImage img = defaultImg;
         g2D.drawImage(img, x, y, width, height, null);
+    }
+
+    public void addSpawn() {
+        int numEnemies = 5;
+        double angleStep = 2 * Math.PI / numEnemies;
+        int radius = spaceImpact.tileSize * 1; 
+
+        int centerX = x - radius;
+        int centerY = y + height / 2;
+
+        for (int i = 0; i < numEnemies; i++) {
+            double angle = i * angleStep;
+            int virusX = (int)(centerX + radius * Math.cos(angle));
+            int virusY = (int)(centerY + radius * Math.sin(angle));
+
+            ComputerVirus virus = new ComputerVirus(spaceImpact);
+            virus.x = virusX;
+            virus.y = virusY;
+
+            System.out.println("This line of code executes");
+            spaceImpact.compViruses.add(virus);
+        }
     }
 }

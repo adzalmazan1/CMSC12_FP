@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Trojan extends Boss implements Deployable {
+public class Trojan extends Boss {
     private SpaceImpact spaceImpact;
 
     public Trojan(SpaceImpact spaceImpact) {

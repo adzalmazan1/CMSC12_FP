@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Anonymous extends Boss implements Deployable {
+public class Anonymous extends Boss {
     private SpaceImpact spaceImpact;
 
     public Anonymous(SpaceImpact spaceImpact) {
