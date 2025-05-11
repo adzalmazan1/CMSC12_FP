@@ -72,5 +72,22 @@ public class Adware extends Boss {
     @Override
     public void addSpawn() {
         System.out.println("Adware spawn is running");
+        int numEnemies = 5;
+        double angleStep = 2 * Math.PI / numEnemies;
+        int radius = spaceImpact.tileSize;
+
+        int centerX = x - radius;
+        int centerY = y + height / 2;
+
+        for (int i = 0; i < numEnemies; i++) {
+            double angle = i * angleStep;
+            int virusX = (int)(centerX + radius * Math.cos(angle));
+            int virusY = (int)(centerY + radius * Math.sin(angle));
+
+            ComputerVirus virus = new ComputerVirus(spaceImpact);
+            virus.x = virusX;
+            virus.y = virusY;
+            spaceImpact.compViruses.add(virus);
+        }
     }
 }

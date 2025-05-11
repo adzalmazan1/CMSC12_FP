@@ -2,9 +2,6 @@ public class Boss extends Entity implements Deployable, Runnable {
     protected int healthWidth;
     protected int healthHeight;
 
-    protected int deployCounter = 0;
-    protected int deployChange = 300;
-
     protected Thread spawnThread;
     protected boolean spawnStarted = false; // def values
     protected boolean threadRunning = true;
@@ -34,7 +31,7 @@ public class Boss extends Entity implements Deployable, Runnable {
         while(threadRunning) {
             addSpawn();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(7000);
             }
             catch(InterruptedException e) {
                 e.printStackTrace();

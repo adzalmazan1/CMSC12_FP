@@ -58,7 +58,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.bullets =  new CopyOnWriteArrayList<Bullet>();
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
-        this.anon = new Anonymous(this);
+        this.anon = new Anonymous(this, player);
         this.trojan = new Trojan(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -174,6 +174,11 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bullets.remove(i); 
                 anon.setHealth();
                 bulletUsed = true;
+
+                // one time stop of adware's spawn thread when health reaches zero
+                if (anon.getHealth() <= 0) {
+                    anon.stopSpawnThread();
+                }
             }
             else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 3) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
                 bullets.remove(i);
@@ -200,6 +205,13 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             anon.update();
+
+            // start only once the spawn thread
+            if(!anon.spawnStarted) {
+                anon.spawnThread = new Thread(anon);
+                anon.spawnThread.start();
+                anon.spawnStarted = true; // spawn started from this moment
+            }
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             trojan.update();

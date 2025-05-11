@@ -7,9 +7,11 @@ import javax.imageio.ImageIO;
 
 public class Anonymous extends Boss {
     private SpaceImpact spaceImpact;
+    private Player player;
 
-    public Anonymous(SpaceImpact spaceImpact) {
+    public Anonymous(SpaceImpact spaceImpact, Player player) {
         this.spaceImpact = spaceImpact;
+        this.player = player;
         setDefaultValues();
         loadImage();
     }
@@ -56,6 +58,22 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {  
-        System.out.println("Anon spawn is running");
+        System.out.println("Anon spawn is running");                    
+        int centerX = player.x + player.width / 2;
+        int centerY = player.y + player.height / 2;
+
+        int radius = 150; 
+        int virusCount = Math.min(spaceImpact.compViruses.size(), 5); // Only teleport up to 8 viruses
+
+        for (int i = 0; i < virusCount; i++) {
+            ComputerVirus virus = spaceImpact.compViruses.get(i);
+            double angle = 2 * Math.PI * i / virusCount;
+
+            int newX = (int) (centerX + radius * Math.cos(angle)) - virus.width / 2;
+            int newY = (int) (centerY + radius * Math.sin(angle)) - virus.height / 2;
+
+            virus.x = newX;
+            virus.y = newY;
+        }
     }
 }
