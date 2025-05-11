@@ -125,6 +125,12 @@ public class SpaceImpact extends JPanel implements Runnable {
         for (int i = compViruses.size() - 1; i >= 0; i--) {
             ComputerVirus cv = compViruses.get(i);
             cv.update();
+            
+            if(detectCollission(player, cv)) {
+                display.setLifeCount();
+                compViruses.remove(i);
+            }
+
             if (cv.outOfBounds) {
                 compViruses.remove(i);
             }
@@ -190,7 +196,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 break;
             }
         }
-    
+        
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             // System.out.println("adware update");
@@ -281,12 +287,14 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
-    public boolean detectCollission(Bullet a, ComputerVirus b) {
+    public boolean detectCollission(Entity a, ComputerVirus b) {
         return a.x < b.x + b.width &&
         a.x + a.width > b.x &&
         a.y < b.y + b.height &&
         a.y + a.height > b.y;
     }
+
+    // entity chosen
 
     public boolean detectCollission(Bullet a, Boss b, int offSetMult) {
         int hitboxOffsetX = tileSize * offSetMult; 
