@@ -7,11 +7,9 @@ import javax.imageio.ImageIO;
 
 public class Anonymous extends Boss {
     private SpaceImpact spaceImpact;
-    private Player player;
 
-    public Anonymous(SpaceImpact spaceImpact, Player player) {
+    public Anonymous(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
-        this.player = player;
         setDefaultValues();
         loadImage();
     }
@@ -42,12 +40,6 @@ public class Anonymous extends Boss {
     }
 
     public void update() {
-        // no movement update
-        deployCounter++;
-        if(deployCounter >= deployChange) {
-            addSpawn();
-            deployCounter = 0;
-        }
     }
 
     public void draw(Graphics2D g2D) {
@@ -63,27 +55,7 @@ public class Anonymous extends Boss {
     }
 
     @Override
-    public void addSpawn() {    
-        /* 
-        int centerX = player.x + player.width / 2;
-        int centerY = player.y + player.height / 2;
-
-        int radius = 150; 
-        int numEnemies = 5;
-
-        for (int i = 0; i < numEnemies; i++) {
-            ComputerVirus virus = new ComputerVirus(spaceImpact);
-            double angle = 2 * Math.PI * i / numEnemies;
-
-            int virusX = (int)(centerX + radius * Math.cos(angle));
-            int virusY = (int)(centerY + radius * Math.sin(angle));
-
-            virus.x = virusX;
-            virus.y = virusY;
-
-            System.out.println("This line of code executes");
-            spaceImpact.compViruses.add(virus);
-        }
-        */
+    public void addSpawn() {  
+        System.out.println("Anon spawn is running");
     }
 }

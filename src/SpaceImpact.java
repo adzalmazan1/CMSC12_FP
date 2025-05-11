@@ -35,7 +35,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int scorePlus = 50;
 
     // Waves quota
-    private int[] enterWaveScore = {0, 200, 300};
+    private int[] enterWaveScore = {20, 200, 300};
 
     // Array Lists
     protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
@@ -58,7 +58,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.bullets =  new CopyOnWriteArrayList<Bullet>();
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
-        this.anon = new Anonymous(this, player);
+        this.anon = new Anonymous(this);
         this.trojan = new Trojan(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -164,6 +164,11 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bullets.remove(i); 
                 adware.setHealth();
                 bulletUsed = true;
+                
+                // one time stop of adware's spawn thread when health reaches zero
+                if (adware.getHealth() <= 0) {
+                    adware.stopSpawnThread();
+                }
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i); 
@@ -183,7 +188,15 @@ public class SpaceImpact extends JPanel implements Runnable {
     
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
+            // System.out.println("adware update");
             adware.update();
+            
+            // start only once the spawn thread
+            if(!adware.spawnStarted) {
+                adware.spawnThread = new Thread(adware);
+                adware.spawnThread.start();
+                adware.spawnStarted = true; // spawn started from this moment
+            }
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             anon.update();

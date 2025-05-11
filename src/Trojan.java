@@ -40,7 +40,6 @@ public class Trojan extends Boss {
     }
 
     public void update() {
-        // no movement update
     }
 
     public void draw(Graphics2D g2D) {
@@ -53,5 +52,10 @@ public class Trojan extends Boss {
         // boss image
         BufferedImage img = defaultImg;
         g2D.drawImage(img, x, y, width, height, null);
+    }
+
+    @Override
+    public void addSpawn() {  
+        System.out.println("Trojan spawn is running");
     }
 }
