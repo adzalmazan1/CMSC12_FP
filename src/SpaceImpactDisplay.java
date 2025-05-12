@@ -82,9 +82,11 @@ public class SpaceImpactDisplay extends JPanel {
         statusLabel.setText(gpStat);
     }
 
-    // public void getLifeCount
+    public int getLifeCount() {
+        return lifeCount;
+    }
 
-    public void setLifeCount() {
-       lifeCount -= 1;
+    public void setLifeCount(int newLifeCount) {
+       lifeCount = newLifeCount;
     }
 }

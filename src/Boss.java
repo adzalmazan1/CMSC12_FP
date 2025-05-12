@@ -47,9 +47,11 @@ public class Boss extends Entity implements Deployable, Runnable {
 
     public void stopSpawnThread() {
         threadRunning = false;
+        /* 
         if(spawnThread != null) {
             spawnThread.interrupt(); // best practices null checking
         }
+        */
         spawnStarted = false;
     }
 }

@@ -3,7 +3,7 @@ import java.awt.event.KeyListener;
 
 public class EventHandler implements KeyListener {
     // note: protected can be accessed in the same pkg
-    protected boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed;
+    protected boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -12,9 +12,11 @@ public class EventHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        // System.out.println(code);
 
         switch (code) {
+            // enter
+            case 10:
+                enterPressed = true;
             // left
             case 37:
                 leftPressed = true;
@@ -42,9 +44,11 @@ public class EventHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        // System.out.println(code);
 
         switch (code) {
+            // enter
+            case 10:
+                enterPressed = false;
             // left
             case 37:
                 leftPressed = false;

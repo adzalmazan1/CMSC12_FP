@@ -31,7 +31,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int bulletInterval = 500;
     
     // Scoring system variables
-    private int currentScore = 0;
+    private int currentScore;
     private int scorePlus = 50;
 
     // Waves quota
@@ -51,6 +51,16 @@ public class SpaceImpact extends JPanel implements Runnable {
     private Anonymous anon;
     private Trojan trojan;
 
+    protected int gameState;
+    protected int playState = 0;
+    protected int gameWonState = 1;
+    protected int gameOverState = 2;
+
+    private GameWon gameWon;
+    private GameOver gameOver;
+
+    private boolean gameThreadRunning = true;
+
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
         this.eventH = new EventHandler();
@@ -60,6 +70,9 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.adware = new Adware(this);
         this.anon = new Anonymous(this, player);
         this.trojan = new Trojan(this);
+
+        this.gameWon = new GameWon();
+        this.gameOver = new GameOver();
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -81,7 +94,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
     
         // while loop keeps updating regardless if interacting with the screen or not
-        while (gameThread != null) {
+        while (gameThreadRunning) {
             // quick processes
             update();
             repaint();
@@ -120,6 +133,11 @@ public class SpaceImpact extends JPanel implements Runnable {
                 lastBulletTime = currentTime;
             }
         }
+
+        // modify this line of code
+        if(eventH.enterPressed) {
+            gameState = playState; // condition for game over state
+        }
     
         // virus update *priority*
         for (int i = compViruses.size() - 1; i >= 0; i--) {
@@ -127,8 +145,12 @@ public class SpaceImpact extends JPanel implements Runnable {
             cv.update();
             
             if(detectCollission(player, cv)) {
-                display.setLifeCount();
+                display.setLifeCount(display.getLifeCount() - 1);
                 compViruses.remove(i);
+
+                if(display.getLifeCount() == 0) {
+                    gameState = gameOverState; // condition for game over state
+                }
             }
 
             if (cv.outOfBounds) {
@@ -234,37 +256,46 @@ public class SpaceImpact extends JPanel implements Runnable {
     
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g;
-    
-        // Paint background
-        if (background != null) {
-            background.paintIcon(this, g2D, 0, 0);
-        }
-    
-        draw(g2D); // Draw in Space Impact Panel
-        player.draw(g2D); // Draw Player icon
-    
-        // draws computer viruses from ArrayList
-        for(ComputerVirus i : compViruses) {
-            i.draw(g2D);
-        }
+        Graphics2D g2D = (Graphics2D) g; 
+            if(gameState == playState) {
+                // Paint background
+            if (background != null) {
+                background.paintIcon(this, g2D, 0, 0);
+            }
+        
+            draw(g2D); // Draw in Space Impact Panel
+            player.draw(g2D); // Draw Player icon
+        
+            // draws computer viruses from ArrayList
+            for(ComputerVirus i : compViruses) {
+                i.draw(g2D);
+            }
 
-        // draws bullets viruses from ArrayList
-        for(Bullet i : bullets) {
-            i.draw(g2D);
+            // draws bullets viruses from ArrayList
+            for(Bullet i : bullets) {
+                i.draw(g2D);
+            }
+        
+            // Draw wave elements based on score
+            if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
+                adware.draw(g2D);
+            }
+            else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+                anon.draw(g2D);
+            }
+            else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+                trojan.draw(g2D);
+            }
         }
-    
-        // Draw wave elements based on score
-        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
-            adware.draw(g2D);
+        else if(gameState == gameWonState) {
+            display.setVisible(false);
+            gameWon.draw(g2D, screenWidth, screenHeight);
         }
-        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-            anon.draw(g2D);
+        else if(gameState == gameOverState) {
+            display.setVisible(false);
+            gameOver.draw(g2D, screenWidth, screenHeight);
         }
-        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
-            trojan.draw(g2D);
-        }
-    
+        
         g2D.dispose();
     }
     
