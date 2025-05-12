@@ -172,6 +172,7 @@ public class StartPanel extends JPanel {
 
         leftPanel.setOpaque(false);
         rightPanel.setOpaque(false);
+        
         this.add(leftPanel, BorderLayout.WEST);
         this.add(rightPanel, BorderLayout.CENTER);
     }

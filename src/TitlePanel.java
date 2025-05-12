@@ -20,7 +20,7 @@ public class TitlePanel extends JPanel {
     
     public TitlePanel() {
         this.setPreferredSize(Main.SCREEN_SIZE);
-        setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout());
 
         backgroundImage = new ImageIcon(getClass().getResource("/img/bg1.png")).getImage();
 
@@ -54,8 +54,8 @@ public class TitlePanel extends JPanel {
         bottomPanel.setOpaque(false); 
         bottomPanel.add(startIcon1);
 
-        add(topPanel, BorderLayout.CENTER);
-        add(bottomPanel, BorderLayout.SOUTH);
+        this.add(topPanel, BorderLayout.CENTER);
+        this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     @Override
