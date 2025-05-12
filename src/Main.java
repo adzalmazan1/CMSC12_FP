@@ -1,13 +1,12 @@
 import java.awt.Dimension;
-
 import javax.swing.JFrame;
 
 public class Main extends JFrame {
     protected static final int GAME_WIDTH = 875;
-    protected static final int GAME_HEIGHT = 560;
+    protected static final int GAME_HEIGHT = 585;
     protected static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-    private TitlePanel titlePanel;
     
+    private TitlePanel titlePanel;
     public Main() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         this.setPreferredSize(SCREEN_SIZE);

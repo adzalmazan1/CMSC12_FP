@@ -44,7 +44,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Player and event handler
     private Player player;
     private EventHandler eventH;
-    private Sound sound = new Sound();
+    // private Sound sound = new Sound();
 
     // Bosses declaration
     private Adware adware;
@@ -154,10 +154,14 @@ public class SpaceImpact extends JPanel implements Runnable {
                 // collission check for bullet and computer virus
                 if (detectCollission(b, cv) && !bulletUsed) {
                     bullets.remove(i);
-                    compViruses.remove(j);
                     bulletUsed = true;
-                    currentScore += scorePlus;
-                    
+                    cv.setHealth();
+
+                    if(cv.getHealth() == 0) {
+                        compViruses.remove(j);
+                        currentScore += scorePlus;
+                    }
+
                     if (display != null) { // null checking for best practices
                         display.setCurrentScore(currentScore);
                     }
@@ -274,6 +278,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     }
     
+    /* 
     // To do -> music part
     public void playMusic(int i) {
         sound.setFile(i);
@@ -289,6 +294,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         sound.setFile(i);
         sound.play();
     }
+    */
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
     public boolean detectCollission(Entity a, ComputerVirus b) {

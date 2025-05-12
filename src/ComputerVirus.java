@@ -1,13 +1,15 @@
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 public class ComputerVirus extends Entity implements Deployable {
     private SpaceImpact spaceImpact;
+    private int health;
+    private boolean isBuffed;
+
+    private BufferedImage upBuffed, downBuffed;
 
     public ComputerVirus(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
@@ -16,8 +18,9 @@ public class ComputerVirus extends Entity implements Deployable {
         loadImage();
     }
 
+    // These are default values for any type
     public void setDefaultValues() {
-        int xMin = ((4 * spaceImpact.columns) /  5) * spaceImpact.tileSize;
+        int xMin = ((4 * spaceImpact.columns) / 5) * spaceImpact.tileSize;
         int xMax = (spaceImpact.columns - 1) * spaceImpact.tileSize;
 
         int yMin = spaceImpact.tileSize * 2;
@@ -31,17 +34,41 @@ public class ComputerVirus extends Entity implements Deployable {
 
         width = spaceImpact.tileSize + 8;
         height = (spaceImpact.tileSize / 2) + 8;
-
+        
+        health = 1;
+        isBuffed = false;
+   
         frameChange = 20;
-        movementChange = 60; // (1 sec, 1 movement)
+        movementChange = 60;
+    }
+
+    public void setHealth() {
+        health -= 1;
+    }
+
+    public void setHealthBuff(int buffedHealth) {
+        health = buffedHealth;
+        buffVirus(buffedHealth);
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void buffVirus(int buffMult) {
+        speed *= buffMult;
+        width *= buffMult;
+        height *= buffMult;
+        isBuffed = true;
     }
 
     public void loadImage() {
         try {
             up = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/up.png"));
             down = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/down.png"));
-        }
-        catch (IOException e){
+            upBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerUp.jpeg"));
+            downBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerDown.jpeg"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -93,22 +120,26 @@ public class ComputerVirus extends Entity implements Deployable {
         BufferedImage img = null;
         switch (direction) {
             case "up":
-                img = up;
+                if(isBuffed) {
+                    img = upBuffed;
+                }
+                else {
+                    img = up;
+                }
                 break;
             case "down":
-                img = down;
+                if(isBuffed) {
+                    img = downBuffed;
+                }
+                else {
+                    img = down;
+                }
                 break;
         } 
+
         // height tile/2 = 50, orig ratio = 55
         // boolean java.awt.Graphics.drawImage(Image img, int x, int y, int width, int height, ImageObserver observer)
         g2D.drawImage(img, x, y, width, height, null);
     }
 }
 
-/* 
- * About Math.rand()
- * Math.rand() generates a floating point number, say x, in the interval [0,1]
- * multiplying x by 6 makes it in the interval [0,6]
- * converting it to int is a truncation (almost retaining the integer part of the original number), so the value is either 0, 1, 2, 3, 4 or 5 
- * then adding one give either 1, 2, 3, 4, 5 or 6.
-*/

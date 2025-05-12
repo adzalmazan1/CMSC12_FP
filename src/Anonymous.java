@@ -8,6 +8,9 @@ import javax.imageio.ImageIO;
 public class Anonymous extends Boss {
     private SpaceImpact spaceImpact;
     private Player player;
+    
+    private int xLeftMost; 
+    private int xRightMost;
 
     public Anonymous(SpaceImpact spaceImpact, Player player) {
         this.spaceImpact = spaceImpact;
@@ -27,6 +30,9 @@ public class Anonymous extends Boss {
         speed = 8;
         movementChange = 5;
 
+        xLeftMost = spaceImpact.screenWidth / 3;
+        xRightMost = spaceImpact.screenWidth - (spaceImpact.tileSize * 7);
+
         // health width and height ** separate attributes **
         healthWidth = spaceImpact.tileSize * 5;
         healthHeight = 10;
@@ -42,6 +48,15 @@ public class Anonymous extends Boss {
     }
 
     public void update() {
+        movementCounter++;
+        if(movementCounter >= movementChange) {
+            x -= speed;
+            if(x >= xRightMost || x <= xLeftMost) {
+                outOfBounds = true;
+                speed = -speed;
+            }
+            movementCounter = 0;
+        }
     }
 
     public void draw(Graphics2D g2D) {
@@ -49,7 +64,7 @@ public class Anonymous extends Boss {
         g2D.setColor(Color.RED);
         g2D.fill3DRect(x + (spaceImpact.tileSize * 2), y - 10, healthWidth, healthHeight, true);
         
-        g2D.drawRect(x, y, width, height);
+        // g2D.drawRect(x, y, width, height);
 
         // boss image
         BufferedImage img = defaultImg;
