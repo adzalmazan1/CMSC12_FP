@@ -172,9 +172,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bulletUsed = true;
                 
                 // one time stop of adware's spawn thread when health reaches zero
-                if (adware.getHealth() <= 0) {
-                    adware.stopSpawnThread();
-                }
+                stopBossSpawn(adware);
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i); 
@@ -182,14 +180,15 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bulletUsed = true;
 
                 // one time stop of adware's spawn thread when health reaches zero
-                if (anon.getHealth() <= 0) {
-                    anon.stopSpawnThread();
-                }
+                stopBossSpawn(anon);
             }
             else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 3) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
                 bullets.remove(i);
                 trojan.setHealth();
                 bulletUsed = true;
+
+                // one time stop of adware's spawn thread when health reaches zero
+                stopBossSpawn(trojan);
             }
     
             if (bulletUsed) {
@@ -201,26 +200,31 @@ public class SpaceImpact extends JPanel implements Runnable {
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             // System.out.println("adware update");
             adware.update();
-            
-            // start only once the spawn thread
-            if(!adware.spawnStarted) {
-                adware.spawnThread = new Thread(adware);
-                adware.spawnThread.start();
-                adware.spawnStarted = true; // spawn started from this moment
-            }
+            startBossSpawn(adware);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             anon.update();
-
-            // start only once the spawn thread
-            if(!anon.spawnStarted) {
-                anon.spawnThread = new Thread(anon);
-                anon.spawnThread.start();
-                anon.spawnStarted = true; // spawn started from this moment
-            }
+            startBossSpawn(anon);            
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             trojan.update();
+            startBossSpawn(trojan);
+        }
+    }
+
+    public void startBossSpawn(Boss b) {
+        // start only once the spawn thread
+        if(!b.spawnStarted) {
+            b.spawnThread = new Thread(b);
+            b.spawnThread.start();
+            b.spawnStarted = true; // spawn started from this moment
+        }
+    }
+
+    public void stopBossSpawn(Boss b) {
+        // one time stop of adware's spawn thread when health reaches zero
+        if (b.getHealth() <= 0) {
+            b.stopSpawnThread();
         }
     }
     

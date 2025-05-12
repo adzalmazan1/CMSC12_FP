@@ -58,7 +58,8 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {  
-        System.out.println("Anon spawn is running");                    
+        System.out.println("Anon spawn is running: " + player.x);                    
+        /* 
         int centerX = player.x + player.width / 2;
         int centerY = player.y + player.height / 2;
 
@@ -75,5 +76,6 @@ public class Anonymous extends Boss {
             virus.x = newX;
             virus.y = newY;
         }
+        */
     }
 }
