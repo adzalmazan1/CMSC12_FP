@@ -44,7 +44,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Player and event handler
     private Player player;
     private EventHandler eventH;
-    Sound sound = new Sound();
+    private Sound sound = new Sound();
 
     // Bosses declaration
     private Adware adware;

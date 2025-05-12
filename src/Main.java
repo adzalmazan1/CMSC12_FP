@@ -1,38 +1,29 @@
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 
-public class Main {
-    public static void main(String[] args) throws Exception {
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setTitle("Space Impact");
+public class Main extends JFrame {
+    protected static final int GAME_WIDTH = 875;
+    protected static final int GAME_HEIGHT = 560;
+    protected static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+    private TitlePanel titlePanel;
+    
+    public Main() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        this.setPreferredSize(SCREEN_SIZE);
+        this.setResizable(false);
+        this.setTitle("Space Impact");
         
-        SpaceImpactDisplay display = new SpaceImpactDisplay();
-        SpaceImpact spaceImpact = new SpaceImpact(display); // JPanel
-
-        // manages layering of components
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight)); // properties from space impact
-        layeredPane.setLayout(null); // set to null to be able to do the overlapping panels
-
-        spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
-        display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
+        titlePanel = new TitlePanel();
         
-        // set bounds for the components
-        layeredPane.add(spaceImpact, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(display, JLayeredPane.PALETTE_LAYER);
-        
-        frame.add(layeredPane);
-        frame.pack(); // fits the preferred size of its subcomponents 
+        this.add(titlePanel);
+        this.pack(); //sizes the frame so that all its contents are at or above their preferred sizes
 
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        this.setLocationRelativeTo(null); 
+        this.setVisible(true);
+    }
 
-        // this game thread shall only be started if we are led to this panel
-        spaceImpact.startGameThread();
+    public static void main(String[] args) {
+        new Main();
     }
 }
-
