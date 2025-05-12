@@ -66,8 +66,8 @@ public class ComputerVirus extends Entity implements Deployable {
         try {
             up = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/up.png"));
             down = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/down.png"));
-            upBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerUp.jpeg"));
-            downBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerDown.jpeg"));
+            upBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerUp.png"));
+            downBuffed = ImageIO.read(getClass().getResourceAsStream("img/computerVirusSprites/cvBiggerDown.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
