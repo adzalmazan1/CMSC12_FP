@@ -26,10 +26,10 @@ public class GameOverPanel extends JPanel {
                    scorecontinuepanel, gameoverbuttonpanel;
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
-    private static SpaceImpactButton continuebutton, quitbutton;
+    private SpaceImpactButton continuebutton, quitbutton;
 
     public GameOverPanel(SpaceImpact spaceImpact, SpaceImpactDisplay display) {
-        this.setPreferredSize(Main.SCREEN_SIZE);
+        this.setPreferredSize(CardFrame.SCREEN_SIZE);
         this.setBackground(Color.black);
         this.setLayout(new BorderLayout());
 
@@ -125,8 +125,10 @@ public class GameOverPanel extends JPanel {
     public class EventHandler extends MouseMotionAdapter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameOverPanel.this);
+            // JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameOverPanel.this);
             if (e.getSource() == continuebutton) {
+                System.out.println("Continue button pressed");
+                /* 
                 topFrame.getContentPane().removeAll();
 
                 layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight));
@@ -144,14 +146,18 @@ public class GameOverPanel extends JPanel {
 
                 spaceImpact.requestFocusInWindow();
                 spaceImpact.startGameThread();
+                */
             } else if (e.getSource() == quitbutton) {
+                System.out.println("Quit button pressed");
+                /* 
                 topFrame.getContentPane().removeAll();
-                topFrame.add(new TitlePanel());
+                topFrame.add(new TitlePanel(spaceImpact.cardLayout, spaceImpact.container));
                 topFrame.revalidate();
                 topFrame.repaint();
 
                 revalidate();
                 repaint();
+                */
             }
         }
     }

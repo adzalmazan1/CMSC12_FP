@@ -1,3 +1,4 @@
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -48,8 +49,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Array Lists
     protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
-    protected CopyOnWriteArrayList<Bullet> bullets; 
-    
+    protected CopyOnWriteArrayList<Bullet> bullets;
     protected CopyOnWriteArrayList<Life> life;
 
     // Player and event handler
@@ -62,12 +62,10 @@ public class SpaceImpact extends JPanel implements Runnable {
     private Anonymous anon;
     private Trojan trojan;
 
-    protected int gameState;
-    protected int playState = 0;
-    protected int gameWonState = 1;
-    protected int gameOverState = 2;
-
     private boolean gameThreadRunning = true;
+    
+    protected CardLayout cardLayout;
+    protected JPanel container;
 
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
@@ -86,6 +84,11 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
+    public SpaceImpact(CardLayout cardLayout, JPanel container) {
+        this.cardLayout = cardLayout;
+        this.container = container;
+    }
+
     // starting the game thread
     public void startGameThread() {
         gameThread = new Thread(this); // passes SpaceImpact as argument
@@ -102,7 +105,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         // while loop keeps updating regardless if interacting with the screen or not
         while (gameThreadRunning) {
             // quick processes
-            System.out.println("Main game thread running");
+            // System.out.println("Main game thread running");
             update();
             repaint();
 
@@ -180,7 +183,6 @@ public class SpaceImpact extends JPanel implements Runnable {
                         bw.close();
 
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
-                        
                         topFrame.getContentPane().removeAll();
                         topFrame.add(new GameOverPanel(this, display));
                         topFrame.revalidate();

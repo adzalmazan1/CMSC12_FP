@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -27,15 +28,15 @@ public class StartPanel extends JPanel {
     private SpaceImpact spaceImpact;
     private SpaceImpactDisplay display;
     private JLayeredPane layeredPane = new JLayeredPane();
-    
-    public StartPanel(){
-        this.setPreferredSize(new Dimension(Main.SCREEN_SIZE));
+
+    public StartPanel(CardLayout cardLayout, JPanel container){
+        this.setPreferredSize(new Dimension(CardFrame.SCREEN_SIZE));
         this.setLayout(new BorderLayout());
 
         this.display = new SpaceImpactDisplay();
         this.spaceImpact = new SpaceImpact(display);
 
-        backgroundImage = new ImageIcon(getClass().getResource("img/bg1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
         JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(200, 560));
@@ -90,17 +91,13 @@ public class StartPanel extends JPanel {
         how.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(StartPanel.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new HowToPlay());
-                topFrame.revalidate();
-                topFrame.repaint();
+               cardLayout.show(container, "HowToPlay");
             }
         });
     
         leftPanel.add(how, gbc);
 
-        JLabel settings = new JLabel("SETTINGS");
+        JLabel settings = new JLabel("LEADERBOARD");
         settings.setFont(new Font("Race Sport", Font.BOLD, 15));
         settings.setForeground(Color.white);
         gbc.gridx = 0;
@@ -112,38 +109,11 @@ public class StartPanel extends JPanel {
         settings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(StartPanel.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new Settings());
-                topFrame.revalidate();
-                topFrame.repaint();
+                cardLayout.show(container, "Leaderboard");
             }
         });
         
-        leftPanel.add(settings, gbc);
-
-        JLabel credits = new JLabel("CREDITS");
-        credits.setFont(new Font("Race Sport", Font.BOLD, 15));
-        credits.setForeground(Color.white);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.insets = new Insets(5, 0, 5, 0);
-
-        credits.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
-
-        credits.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(StartPanel.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new Credits());
-                topFrame.revalidate();
-                topFrame.repaint();
-            }
-        });
-        
-
-        leftPanel.add(credits, gbc);
+        leftPanel.add(settings, gbc);       
 
         JLabel back = new JLabel("BACK");
         gbc.gridx = 0;
@@ -151,19 +121,15 @@ public class StartPanel extends JPanel {
         gbc.insets = new Insets(5, 0, 5, 0);
     
         leftPanel.add(back, gbc);
-
-        back.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
+ 
         back.setFont(new Font("Race Sport", Font.BOLD, 15));
         back.setForeground(Color.white);
 
+        back.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(StartPanel.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new TitlePanel());
-                topFrame.revalidate();
-                topFrame.repaint();
+                cardLayout.show(container, "Title");
             }
         });
 

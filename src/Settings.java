@@ -1,5 +1,6 @@
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -11,20 +12,17 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class Settings extends JPanel {
     private Image backgroundImage;
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public Settings() {
+    public Settings(CardLayout cardLayout, JPanel container) {
         this.setLayout(new BorderLayout()); 
-        backgroundImage = new ImageIcon(getClass().getResource("/img/bg1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(Color.red);
@@ -72,11 +70,7 @@ public class Settings extends JPanel {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(Settings.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new StartPanel());
-                topFrame.revalidate();
-                topFrame.repaint();
+                cardLayout.show(container, "Start");
             }
         });
 

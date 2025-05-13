@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -8,21 +9,24 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class TitlePanel extends JPanel {
     private Image backgroundImage;
     
-    public TitlePanel() {
-        this.setPreferredSize(Main.SCREEN_SIZE);
+    public TitlePanel(CardLayout cardLayout, JPanel container) {
+        this.setName( "titlePanel");
+        this.setPreferredSize(CardFrame.SCREEN_SIZE);
         this.setLayout(new BorderLayout());
 
-        backgroundImage = new ImageIcon(getClass().getResource("img/bg1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
+
+        ImageIcon titleIcon = new ImageIcon(getClass().getResource("img/title.png")); 
+        Image scaledTitle = titleIcon.getImage().getScaledInstance(700, 460, Image.SCALE_SMOOTH);
+        JLabel title = new JLabel(new ImageIcon(scaledTitle));
+        title.setOpaque(false);
 
         JLabel startIcon1 = new JLabel("START");
         startIcon1.setFont(new Font("Race Sport", Font.BOLD, 20));
@@ -31,18 +35,14 @@ public class TitlePanel extends JPanel {
         startIcon1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(TitlePanel.this);
-                topFrame.getContentPane().removeAll();
-                topFrame.add(new StartPanel());
-                topFrame.revalidate();
-                topFrame.repaint();
+                cardLayout.show(container, "Start");
             }
         });
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(875, 400));
         topPanel.setOpaque(false);
-        // topPanel.add(title, BorderLayout.CENTER);
+        topPanel.add(title, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setPreferredSize(new Dimension(875, 100));
