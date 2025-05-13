@@ -29,10 +29,10 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Computer virus/normals spawn time
     private long lastSpawnTime = System.currentTimeMillis();
-    private int spawnInterval = 2000;
+    private int spawnInterval = 2000; // 2 seconds
     
     private long lastGiftTime = System.currentTimeMillis();
-    private int giftInterval = 5000;
+    private int giftInterval = 30000; // 30 seconds
 
     // To do: update spawnInterval / give it a multiplier depending on what wave you're in
 
@@ -46,6 +46,8 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Waves quota
     private int[] enterWaveScore = {20, 200, 300};
+    private int[] multiplier = {1, 2, 3};
+    private int currWaveIndex = 0;
 
     // Array Lists
     protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
@@ -196,7 +198,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
                     if(cv.getHealth() == 0) {
                         compViruses.remove(j);
-                        currentScore += scorePlus;
+                        currentScore += (scorePlus * multiplier[currWaveIndex]); // to be modified
                     }
 
                     if (display != null) { // null checking for best practices
@@ -251,24 +253,100 @@ public class SpaceImpact extends JPanel implements Runnable {
         
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
+            currWaveIndex = 0;
             adware.update();
-
-            if(detectCollission(player, adware, 3)) {
-                System.out.println("Collision between player and adware");
-                display.setLifeCount(0); // note
-                gameOver();
-            }
-
+            bossCollissionLogic(adware, 3);
             startBossSpawn(adware);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+            currWaveIndex = 1;
             anon.update();
+            bossCollissionLogic(anon, 4);
             startBossSpawn(anon);            
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+            currWaveIndex = 2;
             trojan.update();
+            bossCollissionLogic(trojan, 3);
             startBossSpawn(trojan);
         }
+    }
+    
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g; 
+        // Paint background
+        if (background != null) {
+            background.paintIcon(this, g2D, 0, 0);
+        }
+    
+        // draw(g2D); // Draw in Space Impact Panel
+        player.draw(g2D); // Draw Player icon
+        
+        // draws computer viruses from ArrayList
+        for(ComputerVirus i : compViruses) {
+            i.draw(g2D);
+        }
+
+        // draws bullets viruses from ArrayList
+        for(Bullet i : bullets) {
+            i.draw(g2D);
+        }
+
+        // Draw Life array here
+        for(Life i : life) {
+            i.draw(g2D);
+        }
+    
+        // Draw wave elements based on score
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
+            adware.draw(g2D);
+        }
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+            anon.draw(g2D);
+        }
+        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+            trojan.draw(g2D);
+        }
+        g2D.dispose();
+    }
+    
+    public void draw(Graphics2D g2D) {
+        g2D.setColor(Color.BLACK); 
+        for(int i = 0; i <= columns; i++) {
+            g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
+            if(i <= rows) {
+                g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
+            }
+        }
+    }
+    
+    public void bossCollissionLogic(Boss b, int offSetMult) {
+        if(detectCollission(player, b, offSetMult)) {
+            // System.out.println("Collision between player and adware");
+            display.setLifeCount(0); // note
+            gameOver();
+        }
+    }
+
+    // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
+    public boolean detectCollission(Entity a, Entity b) {
+        return a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+    }
+
+    // entity chosen
+    public boolean detectCollission(Entity a, Boss b, int offSetMult) {
+        int hitboxOffsetX = tileSize * offSetMult; 
+        int adjustedX = b.x + hitboxOffsetX;
+        int adjustedWidth = b.width - hitboxOffsetX;
+    
+        return a.x < adjustedX + adjustedWidth &&
+               a.x + a.width > adjustedX &&
+               a.y < b.y + b.height &&
+               a.y + a.height > b.y;
     }
 
     // leads to game over screen
@@ -323,94 +401,9 @@ public class SpaceImpact extends JPanel implements Runnable {
             b.stopSpawnThread();
         }
     }
-    
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2D = (Graphics2D) g; 
-        // Paint background
-        if (background != null) {
-            background.paintIcon(this, g2D, 0, 0);
-        }
-    
-        // draw(g2D); // Draw in Space Impact Panel
-        player.draw(g2D); // Draw Player icon
-        
-        // draws computer viruses from ArrayList
-        for(ComputerVirus i : compViruses) {
-            i.draw(g2D);
-        }
-
-        // draws bullets viruses from ArrayList
-        for(Bullet i : bullets) {
-            i.draw(g2D);
-        }
-
-        // Draw Life array here
-        for(Life i : life) {
-            i.draw(g2D);
-        }
-    
-        // Draw wave elements based on score
-        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
-            adware.draw(g2D);
-        }
-        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-            anon.draw(g2D);
-        }
-        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
-            trojan.draw(g2D);
-        }
-        g2D.dispose();
-    }
-    
-    public void draw(Graphics2D g2D) {
-        g2D.setColor(Color.BLACK); 
-        for(int i = 0; i <= columns; i++) {
-            g2D.drawLine(i * tileSize, 0, i * tileSize, screenHeight);
-            if(i <= rows) {
-                g2D.drawLine(0, i * tileSize, screenWidth, i * tileSize);
-            }
-        }
-    }
-    
-    /* 
-    // To do -> music part
-    public void playMusic(int i) {
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
-    }
-
-    public void stopMusic() {
-        sound.stop();
-    }
-
-    public void playSFX(int i) {
-        sound.setFile(i);
-        sound.play();
-    }
-    */
-
-    // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
-    public boolean detectCollission(Entity a, Entity b) {
-        return a.x < b.x + b.width &&
-        a.x + a.width > b.x &&
-        a.y < b.y + b.height &&
-        a.y + a.height > b.y;
-    }
-
-    // entity chosen
-    public boolean detectCollission(Entity a, Boss b, int offSetMult) {
-        int hitboxOffsetX = tileSize * offSetMult; 
-        int adjustedX = b.x + hitboxOffsetX;
-        int adjustedWidth = b.width - hitboxOffsetX;
-    
-        return a.x < adjustedX + adjustedWidth &&
-               a.x + a.width > adjustedX &&
-               a.y < b.y + b.height &&
-               a.y + a.height > b.y;
-    }
 }
+
+
 
 /* 
 Collission Logic
