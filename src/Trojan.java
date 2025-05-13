@@ -70,6 +70,7 @@ public class Trojan extends Boss {
 
             ComputerVirus virus = new ComputerVirus(spaceImpact);
             virus.setHealthBuff(2);
+            virus.setIsBuffed(true);
             
             virus.x = virusX;
             virus.y = virusY;

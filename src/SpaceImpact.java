@@ -134,10 +134,12 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
 
+        /* 
         // modify this line of code
         if(eventH.enterPressed) {
             gameState = playState; // condition for game over state
         }
+        */
     
         // virus update *priority*
         for (int i = compViruses.size() - 1; i >= 0; i--) {
@@ -178,6 +180,11 @@ public class SpaceImpact extends JPanel implements Runnable {
                     bullets.remove(i);
                     bulletUsed = true;
                     cv.setHealth();
+
+                    if(cv.getHealth() == 1) {
+                        cv.setIsBuffed(false);
+                        cv.buffVirus(0.5);
+                    }
 
                     if(cv.getHealth() == 0) {
                         compViruses.remove(j);

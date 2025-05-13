@@ -42,10 +42,12 @@ public class ComputerVirus extends Entity implements Deployable {
         movementChange = 60;
     }
 
+    // set Health to -1
     public void setHealth() {
         health -= 1;
     }
 
+    // set Health to buffed health and buff the virus
     public void setHealthBuff(int buffedHealth) {
         health = buffedHealth;
         buffVirus(buffedHealth);
@@ -55,11 +57,16 @@ public class ComputerVirus extends Entity implements Deployable {
         return health;
     }
 
-    public void buffVirus(int buffMult) {
+    // method to buff the  virus
+    public void buffVirus(double buffMult) {
         speed *= buffMult;
         width *= buffMult;
         height *= buffMult;
-        isBuffed = true;
+    }
+
+    // setter for isBuffed boolean
+    public void setIsBuffed(boolean buffed) {
+        isBuffed = buffed;
     }
 
     public void loadImage() {
