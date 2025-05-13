@@ -2,10 +2,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class SpaceImpact extends JPanel implements Runnable {
     // Variables for the dimensions
@@ -13,7 +19,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     protected final int screenWidth = columns * tileSize, screenHeight = rows * tileSize;
 
     // Display
-    private ImageIcon background = new ImageIcon(getClass().getResource("img/gameBackground.gif")); // background animation for SpaceImpact Panel 
+    private ImageIcon background = new ImageIcon(getClass().getResource("img/bg/gameBackground.gif")); // background animation for SpaceImpact Panel 
     private SpaceImpactDisplay display;
 
     // Game FPS
@@ -34,7 +40,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int bulletInterval = 500;
     
     // Scoring system variables
-    private int currentScore;
+    protected int currentScore;
     private int scorePlus = 50;
 
     // Waves quota
@@ -61,9 +67,6 @@ public class SpaceImpact extends JPanel implements Runnable {
     protected int gameWonState = 1;
     protected int gameOverState = 2;
 
-    private GameWon gameWon;
-    private GameOver gameOver;
-
     private boolean gameThreadRunning = true;
 
     public SpaceImpact(SpaceImpactDisplay display) {
@@ -76,9 +79,6 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.adware = new Adware(this);
         this.anon = new Anonymous(this, player);
         this.trojan = new Trojan(this);
-
-        this.gameWon = new GameWon();
-        this.gameOver = new GameOver();
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -145,16 +145,6 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
         }
 
-        /* 
-        // modify this line of code
-        if(eventH.enterPressed) {
-            gameState = playState; // condition for game over state
-        }
-        */
-        
-        // life
-
-        // virus update *priority*
         for (int i = compViruses.size() - 1; i >= 0; i--) {
             ComputerVirus cv = compViruses.get(i);
             cv.update();
@@ -164,7 +154,33 @@ public class SpaceImpact extends JPanel implements Runnable {
                 compViruses.remove(i);
 
                 if(display.getLifeCount() == 0) {
-                    gameState = gameOverState; // condition for game over state
+                    File scoreFile = new File("src/txt/scores.txt");
+                    try {
+                        if(scoreFile.createNewFile()) {
+                            System.out.println("Successfully created file!");
+                        }
+                        else {
+                             System.out.println("File already exists.");
+                        }
+
+                        FileWriter fw = new FileWriter(scoreFile, true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+
+                        bw.write(String.valueOf(currentScore) + "\n");
+                        bw.flush();
+                        bw.close();
+
+                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
+                        gameThreadRunning = false;
+                        gameThread.interrupt();
+                        topFrame.getContentPane().removeAll();
+                        topFrame.add(new GameOverPanel(this, display));
+                        topFrame.revalidate();
+                        topFrame.repaint();
+                    }
+                    catch(IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -289,50 +305,39 @@ public class SpaceImpact extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g; 
-            if(gameState == playState) {
-                // Paint background
-            if (background != null) {
-                background.paintIcon(this, g2D, 0, 0);
-            }
+        // Paint background
+        if (background != null) {
+            background.paintIcon(this, g2D, 0, 0);
+        }
+    
+        draw(g2D); // Draw in Space Impact Panel
+        player.draw(g2D); // Draw Player icon
         
-            draw(g2D); // Draw in Space Impact Panel
-            player.draw(g2D); // Draw Player icon
-            
-            // draws computer viruses from ArrayList
-            for(ComputerVirus i : compViruses) {
-                i.draw(g2D);
-            }
+        // draws computer viruses from ArrayList
+        for(ComputerVirus i : compViruses) {
+            i.draw(g2D);
+        }
 
-            // draws bullets viruses from ArrayList
-            for(Bullet i : bullets) {
-                i.draw(g2D);
-            }
+        // draws bullets viruses from ArrayList
+        for(Bullet i : bullets) {
+            i.draw(g2D);
+        }
 
-            // Draw Life array here
-            for(Life i : life) {
-                i.draw(g2D);
-            }
-        
-            // Draw wave elements based on score
-            if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
-                adware.draw(g2D);
-            }
-            else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
-                anon.draw(g2D);
-            }
-            else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
-                trojan.draw(g2D);
-            }
+        // Draw Life array here
+        for(Life i : life) {
+            i.draw(g2D);
         }
-        else if(gameState == gameWonState) {
-            display.setVisible(false);
-            gameWon.draw(g2D, screenWidth, screenHeight);
+    
+        // Draw wave elements based on score
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
+            adware.draw(g2D);
         }
-        else if(gameState == gameOverState) {
-            display.setVisible(false);
-            gameOver.draw(g2D, screenWidth, screenHeight);
+        else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+            anon.draw(g2D);
         }
-        
+        else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
+            trojan.draw(g2D);
+        }
         g2D.dispose();
     }
     

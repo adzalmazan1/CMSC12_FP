@@ -32,7 +32,7 @@ public class Bullet extends Entity implements Deployable {
 
     public void loadImage() {
         try {
-            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bullet.png"));
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/otherSprites/bullet.png"));
         }
         catch (IOException e){
             e.printStackTrace();

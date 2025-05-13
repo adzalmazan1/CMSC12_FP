@@ -35,7 +35,7 @@ public class StartPanel extends JPanel {
         this.display = new SpaceImpactDisplay();
         this.spaceImpact = new SpaceImpact(display);
 
-        backgroundImage = new ImageIcon(getClass().getResource("/img/bg1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg1.png")).getImage();
 
         JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(200, 560));

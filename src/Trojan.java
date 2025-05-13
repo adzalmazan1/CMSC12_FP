@@ -39,6 +39,7 @@ public class Trojan extends Boss {
         }
     }
 
+    // nothing here
     public void update() {
     }
 

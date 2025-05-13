@@ -39,7 +39,7 @@ public class Life extends Entity implements Deployable {
     @Override
     public void loadImage() {
         try {
-            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/life.png"));
+            defaultImg = ImageIO.read(getClass().getResourceAsStream("img/otherSprites/life.png"));
         }
         catch (IOException e){
             e.printStackTrace();

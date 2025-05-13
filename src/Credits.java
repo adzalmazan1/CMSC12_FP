@@ -24,7 +24,7 @@ public class Credits extends JPanel {
     
     public Credits() {
         this.setLayout(new BorderLayout());
-        backgroundImage = new ImageIcon(getClass().getResource("/img/bg1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg1.png")).getImage();
 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(Color.red);
@@ -102,5 +102,4 @@ public class Credits extends JPanel {
         g2d.fillRect(100, 100, 665, 315);
         g2d.dispose(); 
     }
-    
 }

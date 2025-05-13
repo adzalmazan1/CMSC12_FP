@@ -22,12 +22,7 @@ public class TitlePanel extends JPanel {
         this.setPreferredSize(Main.SCREEN_SIZE);
         this.setLayout(new BorderLayout());
 
-        backgroundImage = new ImageIcon(getClass().getResource("/img/bg1.png")).getImage();
-
-        // ImageIcon titleIcon = new ImageIcon(getClass().getResource("/img/title.png")); 
-        // Image scaledTitle = titleIcon.getImage().getScaledInstance(700, 460, Image.SCALE_SMOOTH);
-        // JLabel title = new JLabel(new ImageIcon(scaledTitle));
-        // title.setOpaque(false);
+        backgroundImage = new ImageIcon(getClass().getResource("img/bg1.png")).getImage();
 
         JLabel startIcon1 = new JLabel("START");
         startIcon1.setFont(new Font("Race Sport", Font.BOLD, 20));
