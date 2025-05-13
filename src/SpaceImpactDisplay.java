@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class SpaceImpactDisplay extends JPanel {
     private SpaceImpact spaceImpact;
@@ -46,15 +47,16 @@ public class SpaceImpactDisplay extends JPanel {
         // .scoreboard .thisfunction()
         JPanel scoreBoard = new JPanel();
         scoreBoard.setLayout(new GridLayout(2, 1));
+        scoreBoard.setBorder(new EmptyBorder(20, 0, 10, 0));
         scoreBoard.setOpaque(false);
 
         JLabel scoreLabel = new JLabel("SCORE", JLabel.CENTER); // center a JLabel
-        scoreLabel.setFont(new Font("Cambria", Font.BOLD, 20));
+        scoreLabel.setFont(new Font("Race Sport", Font.BOLD, 20));
         scoreLabel.setForeground(Color.WHITE);
         scoreBoard.add(scoreLabel);
 
         scoreCount = new JLabel("0", JLabel.CENTER);
-        scoreCount.setFont(new Font("Cambria", Font.BOLD, 20));
+        scoreCount.setFont(new Font("Race Sport", Font.BOLD, 20));
         scoreCount.setForeground(Color.WHITE);
         scoreBoard.add(scoreCount);
 
@@ -63,7 +65,7 @@ public class SpaceImpactDisplay extends JPanel {
         statusBoard.setOpaque(false);
 
         statusLabel = new JLabel("First Wave", JLabel.CENTER);
-        statusLabel.setFont(new Font("Cambria", Font.BOLD, 20));
+        statusLabel.setFont(new Font("Race Sport", Font.BOLD, 20));
         statusLabel.setForeground(Color.WHITE);
         statusBoard.add(statusLabel, BorderLayout.CENTER);
         

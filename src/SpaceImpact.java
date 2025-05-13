@@ -158,41 +158,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 compViruses.remove(i);
 
                 if(display.getLifeCount() == 0) {
-                    adware.stopSpawnThread();
-                    anon.stopSpawnThread();
-                    trojan.stopSpawnThread();
-
-                    gameThreadRunning = false;
-                    gameThread.interrupt();
-                    gameThread = null;
-                    
-                    File scoreFile = new File("src/txt/scores.txt");
-                    try {
-                        if(scoreFile.createNewFile()) {
-                            System.out.println("Successfully created file!");
-                        }
-                        else {
-                             System.out.println("File already exists.");
-                        }
-
-                        FileWriter fw = new FileWriter(scoreFile, true);
-                        BufferedWriter bw = new BufferedWriter(fw);
-
-                        bw.write(String.valueOf(currentScore) + "\n");
-                        bw.flush();
-                        bw.close();
-
-                        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
-                        topFrame.getContentPane().removeAll();
-                        topFrame.add(new GameOverPanel(this, display));
-                        topFrame.revalidate();
-                        topFrame.repaint();
-                    }
-                    catch(IOException e) {
-                        e.printStackTrace();
-                    }
-                    
-                    // gameThread = null;
+                    gameOver();
                 }
             }
 
@@ -202,6 +168,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     
         // bullet update 
+        // bullet collission logics
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet b = bullets.get(i);
             b.update();
@@ -246,7 +213,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bulletUsed = true;
                 
                 // one time stop of adware's spawn thread when health reaches zero
-                stopBossSpawn(adware);
+                stopBossSpawn(adware); // only works if health of boss is zero
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i); 
@@ -284,8 +251,14 @@ public class SpaceImpact extends JPanel implements Runnable {
         
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
-            // System.out.println("adware update");
             adware.update();
+
+            if(detectCollission(player, adware, 3)) {
+                System.out.println("Collision between player and adware");
+                display.setLifeCount(0); // note
+                gameOver();
+            }
+
             startBossSpawn(adware);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
@@ -295,6 +268,43 @@ public class SpaceImpact extends JPanel implements Runnable {
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             trojan.update();
             startBossSpawn(trojan);
+        }
+    }
+
+    // leads to game over screen
+    public void gameOver() {
+        adware.stopSpawnThread();
+        anon.stopSpawnThread();
+        trojan.stopSpawnThread();
+
+        gameThreadRunning = false;
+        gameThread.interrupt();
+        gameThread = null;
+        
+        File scoreFile = new File("src/txt/scores.txt");
+        try {
+            if(scoreFile.createNewFile()) {
+                System.out.println("Successfully created file!");
+            }
+            else {
+                 System.out.println("File already exists.");
+            }
+
+            FileWriter fw = new FileWriter(scoreFile, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write(String.valueOf(currentScore) + "\n");
+            bw.flush();
+            bw.close();
+
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
+            topFrame.getContentPane().removeAll();
+            topFrame.add(new GameOverPanel(this, display));
+            topFrame.revalidate();
+            topFrame.repaint();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -322,7 +332,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             background.paintIcon(this, g2D, 0, 0);
         }
     
-        draw(g2D); // Draw in Space Impact Panel
+        // draw(g2D); // Draw in Space Impact Panel
         player.draw(g2D); // Draw Player icon
         
         // draws computer viruses from ArrayList
@@ -390,8 +400,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     // entity chosen
-
-    public boolean detectCollission(Bullet a, Boss b, int offSetMult) {
+    public boolean detectCollission(Entity a, Boss b, int offSetMult) {
         int hitboxOffsetX = tileSize * offSetMult; 
         int adjustedX = b.x + hitboxOffsetX;
         int adjustedWidth = b.width - hitboxOffsetX;

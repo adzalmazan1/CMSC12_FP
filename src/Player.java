@@ -85,7 +85,7 @@ public class Player extends Entity implements Deployable {
     // currently uses default image only
     public void draw(Graphics2D g2D) {
         g2D.setColor(Color.RED);
-        g2D.drawRect(x, y, width, height);
+        // g2D.drawRect(x, y, width, height);
 
         // draw player
         BufferedImage img = null;

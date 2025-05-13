@@ -122,7 +122,7 @@ public class ComputerVirus extends Entity implements Deployable {
 
     public void draw(Graphics2D g2D) {
         g2D.setColor(Color.RED);
-        g2D.drawRect(x, y, width, height);
+        // g2D.drawRect(x, y, width, height);
 
         BufferedImage img = null;
         switch (direction) {
