@@ -18,7 +18,7 @@ public class SpaceImpactDisplay extends JPanel {
 
     public SpaceImpactDisplay() {
         this.spaceImpact = new SpaceImpact(this);
-        this.life = new Life(spaceImpact);
+        this.life = new Life(spaceImpact, true);
         
         this.setLayout(new BorderLayout());
         

@@ -16,7 +16,7 @@ public class Main extends JFrame {
         titlePanel = new TitlePanel();
         
         this.add(titlePanel);
-        this.pack(); //sizes the frame so that all its contents are at or above their preferred sizes
+        this.pack(); // sizes the frame so that all its contents are at or above their preferred sizes
 
         this.setLocationRelativeTo(null); 
         this.setVisible(true);

@@ -28,7 +28,7 @@ public class ComputerVirus extends Entity implements Deployable {
 
         x = xMin + (int)(Math.random() * ((xMax - xMin)));
         y = yMin + (int)(Math.random() * ((yMax - yMin)));
-
+        
         direction = "up";
         speed = 50;
 

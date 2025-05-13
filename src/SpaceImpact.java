@@ -23,6 +23,9 @@ public class SpaceImpact extends JPanel implements Runnable {
     // Computer virus/normals spawn time
     private long lastSpawnTime = System.currentTimeMillis();
     private int spawnInterval = 2000;
+    
+    private long lastGiftTime = System.currentTimeMillis();
+    private int giftInterval = 5000;
 
     // To do: update spawnInterval / give it a multiplier depending on what wave you're in
 
@@ -41,6 +44,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     protected CopyOnWriteArrayList<ComputerVirus> compViruses;  // copyonwrite is the thread safe version of ArrayList
     protected CopyOnWriteArrayList<Bullet> bullets; 
     
+    protected CopyOnWriteArrayList<Life> life;
+
     // Player and event handler
     private Player player;
     private EventHandler eventH;
@@ -66,6 +71,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.eventH = new EventHandler();
         this.compViruses = new CopyOnWriteArrayList<ComputerVirus>();
         this.bullets =  new CopyOnWriteArrayList<Bullet>();
+        this.life = new CopyOnWriteArrayList<Life>(); // fix life
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
         this.anon = new Anonymous(this, player);
@@ -105,6 +111,11 @@ public class SpaceImpact extends JPanel implements Runnable {
                 lastSpawnTime = currentTime;
             }
 
+            if(currentTime - lastGiftTime >= giftInterval) {
+                life.add(new Life(this, false));
+                lastGiftTime = currentTime;
+            }
+
             // updated system nano time after update and repaint
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
@@ -140,7 +151,9 @@ public class SpaceImpact extends JPanel implements Runnable {
             gameState = playState; // condition for game over state
         }
         */
-    
+        
+        // life
+
         // virus update *priority*
         for (int i = compViruses.size() - 1; i >= 0; i--) {
             ComputerVirus cv = compViruses.get(i);
@@ -228,6 +241,18 @@ public class SpaceImpact extends JPanel implements Runnable {
                 break;
             }
         }
+
+        // life update
+        for (int i = life.size() - 1; i >= 0; i--) {
+            Life lf = life.get(i);
+            
+            if(detectCollission(player, lf)) {
+                if(display.getLifeCount() < 3) {
+                    display.setLifeCount(display.getLifeCount() + 1);
+                }
+                life.remove(i);
+            }
+        }
         
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
@@ -272,7 +297,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         
             draw(g2D); // Draw in Space Impact Panel
             player.draw(g2D); // Draw Player icon
-        
+            
             // draws computer viruses from ArrayList
             for(ComputerVirus i : compViruses) {
                 i.draw(g2D);
@@ -280,6 +305,11 @@ public class SpaceImpact extends JPanel implements Runnable {
 
             // draws bullets viruses from ArrayList
             for(Bullet i : bullets) {
+                i.draw(g2D);
+            }
+
+            // Draw Life array here
+            for(Life i : life) {
                 i.draw(g2D);
             }
         
@@ -335,7 +365,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     */
 
     // collission detection formula from Kenny Yip: https://www.youtube.com/watch?v=UILUMvjLEVU
-    public boolean detectCollission(Entity a, ComputerVirus b) {
+    public boolean detectCollission(Entity a, Entity b) {
         return a.x < b.x + b.width &&
         a.x + a.width > b.x &&
         a.y < b.y + b.height &&

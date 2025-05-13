@@ -10,7 +10,7 @@ public class Sound {
     URL soundURL[] = new URL[30];
     
     public Sound() {
-        soundURL[0] = getClass().getResource("snd/life.png");
+        // soundURL[0] = getClass().getResource("snd/life.png");
     }
 
     public void setFile(int i) {
