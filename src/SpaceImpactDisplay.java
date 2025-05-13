@@ -35,7 +35,7 @@ public class SpaceImpactDisplay extends JPanel {
             }
 
             public void draw(Graphics2D g2D) {
-                for(int i = 0; i < lifeCount; i++){
+                for(int i = 0; i < lifeCount; i++) {
                     life.draw(g2D, i);
                 }
                 
@@ -64,8 +64,8 @@ public class SpaceImpactDisplay extends JPanel {
         statusBoard.setLayout(new BorderLayout());
         statusBoard.setOpaque(false);
 
-        statusLabel = new JLabel("First Wave", JLabel.CENTER);
-        statusLabel.setFont(new Font("Race Sport", Font.BOLD, 20));
+        statusLabel = new JLabel("", JLabel.CENTER);
+        statusLabel.setFont(new Font("Race Sport", Font.BOLD, 15));
         statusLabel.setForeground(Color.WHITE);
         statusBoard.add(statusLabel, BorderLayout.CENTER);
         

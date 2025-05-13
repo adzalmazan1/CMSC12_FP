@@ -32,7 +32,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int spawnInterval = 2000; // 2 seconds
     
     private long lastGiftTime = System.currentTimeMillis();
-    private int giftInterval = 30000; // 30 seconds
+    private int giftInterval = 10000; // 30 seconds
 
     // To do: update spawnInterval / give it a multiplier depending on what wave you're in
 
@@ -217,7 +217,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 // one time stop of adware's spawn thread when health reaches zero
                 stopBossSpawn(adware); // only works if health of boss is zero
             }
-            else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 4) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
+            else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 2) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i); 
                 anon.setHealth();
                 bulletUsed = true;
@@ -254,20 +254,23 @@ public class SpaceImpact extends JPanel implements Runnable {
         // Update boss appearance and health checks for different waves
         if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             currWaveIndex = 0;
+            display.setGamePlayStatus("First Wave");
             adware.update();
-            bossCollissionLogic(adware, 3);
+            bossCollissionLogic(adware, 2);
             startBossSpawn(adware);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             currWaveIndex = 1;
+            display.setGamePlayStatus("Second Wave");
             anon.update();
-            bossCollissionLogic(anon, 4);
+            bossCollissionLogic(anon, 1);
             startBossSpawn(anon);            
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             currWaveIndex = 2;
+            display.setGamePlayStatus("The Final Wave");
             trojan.update();
-            bossCollissionLogic(trojan, 3);
+            bossCollissionLogic(trojan, 2);
             startBossSpawn(trojan);
         }
     }
@@ -280,7 +283,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             background.paintIcon(this, g2D, 0, 0);
         }
     
-        // draw(g2D); // Draw in Space Impact Panel
+        draw(g2D); // Draw in Space Impact Panel
         player.draw(g2D); // Draw Player icon
         
         // draws computer viruses from ArrayList
