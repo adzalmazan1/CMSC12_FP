@@ -18,6 +18,9 @@ public class Life extends Entity implements Deployable {
 
     @Override
     public void setDefaultValues() {
+        width = spaceImpact.tileSize;
+        height = spaceImpact.tileSize;
+        
         if(isForDisplay) {
             x = spaceImpact.tileSize;
             y = spaceImpact.tileSize / 2;
@@ -32,8 +35,6 @@ public class Life extends Entity implements Deployable {
             x = xMin + (int)(Math.random() * ((xMax - xMin)));
             y = yMin + (int)(Math.random() * ((yMax - yMin)));
         }
-        width = spaceImpact.tileSize;
-        height = spaceImpact.tileSize;
     }
 
     @Override

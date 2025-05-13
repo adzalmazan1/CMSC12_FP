@@ -102,6 +102,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         // while loop keeps updating regardless if interacting with the screen or not
         while (gameThreadRunning) {
             // quick processes
+            System.out.println("Main game thread running");
             update();
             repaint();
 
@@ -154,6 +155,14 @@ public class SpaceImpact extends JPanel implements Runnable {
                 compViruses.remove(i);
 
                 if(display.getLifeCount() == 0) {
+                    adware.stopSpawnThread();
+                    anon.stopSpawnThread();
+                    trojan.stopSpawnThread();
+
+                    gameThreadRunning = false;
+                    gameThread.interrupt();
+                    gameThread = null;
+                    
                     File scoreFile = new File("src/txt/scores.txt");
                     try {
                         if(scoreFile.createNewFile()) {
@@ -171,8 +180,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                         bw.close();
 
                         JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
-                        gameThreadRunning = false;
-                        gameThread.interrupt();
+                        
                         topFrame.getContentPane().removeAll();
                         topFrame.add(new GameOverPanel(this, display));
                         topFrame.revalidate();
@@ -181,6 +189,8 @@ public class SpaceImpact extends JPanel implements Runnable {
                     catch(IOException e) {
                         e.printStackTrace();
                     }
+                    
+                    // gameThread = null;
                 }
             }
 
