@@ -26,7 +26,7 @@ public class GameOverPanel extends JPanel {
                    scorecontinuepanel, gameoverbuttonpanel;
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
-    private SpaceImpactButton continuebutton, quitbutton;
+    private static SpaceImpactButton continuebutton, quitbutton;
 
     public GameOverPanel(SpaceImpact spaceImpact, SpaceImpactDisplay display) {
         this.setPreferredSize(CardFrame.SCREEN_SIZE);
@@ -97,16 +97,10 @@ public class GameOverPanel extends JPanel {
         gameoverbuttonpanel.setLayout(new GridLayout(1, 2));
         gameoverbuttonpanel.setBackground(Color.BLACK);
 
-        continuebutton = new SpaceImpactButton();
-        continuebutton.setText("CONTINUE");
-        continuebutton.setFont(new Font("Race Sport", Font.PLAIN, 15));
-        continuebutton.setForeground(Color.BLACK);
+        continuebutton = new SpaceImpactButton("CONTINUE");
         gameoverbuttonpanel.add(continuebutton);
 
-        quitbutton = new SpaceImpactButton();
-        quitbutton.setText("QUIT");
-        quitbutton.setFont(new Font("Race Sport", Font.PLAIN, 15));
-        quitbutton.setForeground(Color.BLACK);
+        quitbutton = new SpaceImpactButton("QUIT");
         gameoverbuttonpanel.add(quitbutton);
 
         gameoverpanel.add(gameoverbuttonpanel);
