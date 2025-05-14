@@ -380,7 +380,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
             topFrame.getContentPane().removeAll();
-            topFrame.add(new GameOverPanel(this, display));
+            topFrame.add(new GameOverPanel());
             topFrame.revalidate();
             topFrame.repaint();
         }

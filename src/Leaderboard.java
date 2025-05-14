@@ -16,11 +16,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Settings extends JPanel {
+public class Leaderboard extends JPanel {
     private Image backgroundImage;
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public Settings(CardLayout cardLayout, JPanel container) {
+    public Leaderboard(CardLayout cardLayout, JPanel container) {
         this.setLayout(new BorderLayout()); 
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 

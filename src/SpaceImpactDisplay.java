@@ -1,9 +1,11 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,6 +18,9 @@ public class SpaceImpactDisplay extends JPanel {
     // global var for modification
     private JLabel scoreCount;
     private JLabel statusLabel;
+
+    private CardLayout cardLayout;
+    private JPanel container;
 
     public SpaceImpactDisplay() {
         this.spaceImpact = new SpaceImpact(this);

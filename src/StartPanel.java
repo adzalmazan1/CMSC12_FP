@@ -27,7 +27,8 @@ public class StartPanel extends JPanel {
 
     private SpaceImpact spaceImpact;
     private SpaceImpactDisplay display;
-    private JLayeredPane layeredPane = new JLayeredPane();
+    
+    private JLayeredPane layeredPane;
 
     public StartPanel(CardLayout cardLayout, JPanel container){
         this.setPreferredSize(new Dimension(CardFrame.SCREEN_SIZE));
@@ -35,6 +36,7 @@ public class StartPanel extends JPanel {
 
         this.display = new SpaceImpactDisplay();
         this.spaceImpact = new SpaceImpact(display);
+        this.layeredPane = new JLayeredPane();
 
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 

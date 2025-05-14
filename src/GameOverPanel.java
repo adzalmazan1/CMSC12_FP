@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseMotionAdapter;
 
+import javax.smartcardio.Card;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -17,10 +19,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class GameOverPanel extends JPanel {
-    private SpaceImpact spaceImpact;
-    private SpaceImpactDisplay display;
-    private JLayeredPane layeredPane = new JLayeredPane();
-
     private JPanel gameoverpanel, gameovertoppanel, gameoverleftpanel,
                    gameoverrightpanel, gameoverbottompanel, gameoverlabelpanel,
                    scorecontinuepanel, gameoverbuttonpanel;
@@ -28,14 +26,23 @@ public class GameOverPanel extends JPanel {
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
     private static SpaceImpactButton continuebutton, quitbutton;
 
-    public GameOverPanel(SpaceImpact spaceImpact, SpaceImpactDisplay display) {
+    // try re using CardFrame
+    private CardLayout cardLayout;
+    private JPanel container;
+
+    private JLayeredPane layeredPane;
+    private SpaceImpact spaceImpact;
+    private SpaceImpactDisplay display;
+
+    public GameOverPanel(CardLayout cardLayout, JPanel container) {
         this.setPreferredSize(CardFrame.SCREEN_SIZE);
         this.setBackground(Color.black);
         this.setLayout(new BorderLayout());
-
-        this.display = display;
-        this.spaceImpact = spaceImpact;
-
+        
+        this.layeredPane = new JLayeredPane();
+        this.display = new SpaceImpactDisplay();
+        this.spaceImpact = new SpaceImpact(display);
+        
         // Top and side panels for spacing
         gameovertoppanel = new JPanel();
         gameovertoppanel.setPreferredSize(new Dimension(875, 100));
@@ -119,10 +126,9 @@ public class GameOverPanel extends JPanel {
     public class EventHandler extends MouseMotionAdapter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameOverPanel.this);
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameOverPanel.this);
             if (e.getSource() == continuebutton) {
                 System.out.println("Continue button pressed");
-                /* 
                 topFrame.getContentPane().removeAll();
 
                 layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight));
@@ -131,27 +137,27 @@ public class GameOverPanel extends JPanel {
                 spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
                 display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
 
-                layeredPane.add(spaceImpact, Integer.valueOf(0));
-                layeredPane.add(display, Integer.valueOf(1));
+                // ADD components to the layered pane
+                layeredPane.add(spaceImpact, Integer.valueOf(0)); // background layer
+                layeredPane.add(display, Integer.valueOf(1));     // display overlay
 
                 topFrame.add(layeredPane);
                 topFrame.revalidate();
                 topFrame.repaint();
 
-                spaceImpact.requestFocusInWindow();
+                spaceImpact.requestFocusInWindow(); 
                 spaceImpact.startGameThread();
-                */
             } else if (e.getSource() == quitbutton) {
-                System.out.println("Quit button pressed");
-                /* 
                 topFrame.getContentPane().removeAll();
-                topFrame.add(new TitlePanel(spaceImpact.cardLayout, spaceImpact.container));
+
+                cardLayout.show(container, "Title");                
+                topFrame.add(container);
+
                 topFrame.revalidate();
                 topFrame.repaint();
 
                 revalidate();
                 repaint();
-                */
             }
         }
     }
