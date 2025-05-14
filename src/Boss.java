@@ -18,7 +18,7 @@ public class Boss extends Entity implements Deployable, Runnable {
     }
 
     public void setHealth() {
-        healthWidth -= 30;
+        healthWidth -= 50;
         // change to 0.5 or 1
     }
 
@@ -34,16 +34,16 @@ public class Boss extends Entity implements Deployable, Runnable {
     // method for Runnable
     @Override
     public void run() {
-    while (threadRunning) {
-        addSpawn();
-        try {
-            Thread.sleep(1000);         // Show spawn image for 1 second
-            setIsSpawning(false);
-            Thread.sleep(15000);         // Then wait before spawning again
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (threadRunning) {
+            addSpawn();
+            try {
+                Thread.sleep(1250);         // Show spawn image for 1 second
+                setIsSpawning(false);
+                Thread.sleep(8750);         // Then wait before spawning again
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-    }
     }
 
 

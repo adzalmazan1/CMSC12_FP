@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 
-public class SpaceImpactButton extends JButton {
+public class CustomizedButton extends JButton {
     private boolean over;
     private Color color;
     private Color colorOver;
@@ -19,7 +19,7 @@ public class SpaceImpactButton extends JButton {
 
     private final Font font = new Font("Race Sport", Font.PLAIN, 25);
 
-    public SpaceImpactButton(String text) {
+    public CustomizedButton(String text) {
         super();
         this.text = text;
         setFont(font);

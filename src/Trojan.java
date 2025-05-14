@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -28,12 +27,15 @@ public class Trojan extends Boss {
         // health width and height ** separate attributes **
         healthWidth = spaceImpact.tileSize * 5;
         healthHeight = 10;
+
+        isSpawning = false;
     }
 
     @Override
     public void loadImage() {
         try {
             defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/trojan.png")); 
+            spawnImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/trojanSpawn.png")); 
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -51,14 +53,21 @@ public class Trojan extends Boss {
         // g2D.drawRect(x, y, width, height);
 
         // boss image
-        BufferedImage img = defaultImg;
+        if(!isSpawning) {
+            img = defaultImg;
+        }
+        else {
+            img = spawnImg;
+        }
+
         g2D.drawImage(img, x, y, width, height, null);
     }
 
     @Override
     public void addSpawn() {  
         System.out.println("Trojan spawn is running");
-        int numEnemies = 2;
+        isSpawning = true;
+        int numEnemies = 4;
         int spacing = spaceImpact.tileSize + 10;
 
         int spawnX = x - spaceImpact.tileSize;

@@ -67,7 +67,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private CardLayout cardLayout;
     private JPanel container;
 
-    private GameOverPanel gameOver;
+    private GameTerminated gameTerminated;
 
     public SpaceImpact(CardLayout cardLayout, JPanel container, SpaceImpactDisplay display) {
         this.display = display;
@@ -158,7 +158,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 compViruses.remove(i);
 
                 if(display.getLifeCount() == 0) {
-                    gameOver();
+                    gameTerminated("Game Over", "System compromised");
                 }
             }
 
@@ -230,6 +230,10 @@ public class SpaceImpact extends JPanel implements Runnable {
 
                 // one time stop of adware's spawn thread when health reaches zero
                 stopBossSpawn(trojan);
+
+                if(trojan.getHealth() <= 0) {
+                    gameTerminated("Game Won", "Malware defeated");
+                }
             }
     
             if (bulletUsed) {
@@ -326,7 +330,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         if(detectCollission(player, b, offSetMult)) {
             // System.out.println("Collision between player and adware");
             display.setLifeCount(0); // note
-            gameOver();
+            gameTerminated("Game Over", "System compromised");
         }
     }
 
@@ -351,7 +355,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     }
 
     // leads to game over screen
-    public void gameOver() {
+    public void gameTerminated(String terminationConditions, String addOnText) {
         adware.stopSpawnThread();
         anon.stopSpawnThread();
         trojan.stopSpawnThread();
@@ -360,8 +364,8 @@ public class SpaceImpact extends JPanel implements Runnable {
         gameThread.interrupt();
         gameThread = null;
         
-        gameOver = new GameOverPanel(cardLayout, container, this);
-        container.add(gameOver, "GameOver");
+        gameTerminated = new GameTerminated(cardLayout, container, this, terminationConditions, addOnText);
+        container.add(gameTerminated, "GameOver");
         
          cardLayout.show(container, "GameOver");
 
