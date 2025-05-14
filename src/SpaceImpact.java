@@ -283,7 +283,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             background.paintIcon(this, g2D, 0, 0);
         }
     
-        draw(g2D); // Draw in Space Impact Panel
+        // (g2D); // Draw in Space Impact Panel
         player.draw(g2D); // Draw Player icon
         
         // draws computer viruses from ArrayList

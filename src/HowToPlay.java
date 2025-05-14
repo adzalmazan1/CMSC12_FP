@@ -48,16 +48,15 @@ public class HowToPlay extends JPanel {
         topMiddlePanel.setOpaque(false);
 
        JLabel instructions = new JLabel(
-            "<html><div style='text-align: center; font-size: 12px; color: white; font-family: \"Race Sport\", sans-serif;'>"
-            + "<h2> HOW TO PLAY </h2>"
-            + "<p>Destroy invading computer viruses,<br>"
-            + "defeat bosses, and protect your system! <br>" 
-            + "Survive each wave and rack up the highest score!</p><br>"
-
-            + "<b>CONTROLS:</b><br>"
-            + "← / → : Move left or right<br>"
-            + "↑ / ↓ : Move up or down<br>"
-            + "Spacebar : Shoot antivirus beams<br>"
+            "<html><div style='text-align: center; font-size: 12px; color: white; font-family: \"Roboto\", sans-serif;'>"
+            + "<h1> HOW TO PLAY </h1>"
+            + "<p><b>Survive the malware mayhem by defeating<br>"
+            + "Adware, Anon, and Trojan. Endure each boss<br>" 
+            + "wave and rack up the highest score!</b></p><br>"
+            
+            + "<h2> CONTROLS </h2>"
+            + "<p><b>Movement: arrow keys [← ↑ → ↓]<br>"
+            + "Attack: spacebar [spc] </b></p><br>"
         );
         instructions.setHorizontalAlignment(JLabel.CENTER);
         
