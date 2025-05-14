@@ -1,57 +1,84 @@
-import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.Image;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class Leaderboard extends JPanel {
     private Image backgroundImage;
     private GridBagConstraints gbc = new GridBagConstraints();
+    private ArrayList<Integer> scores = new ArrayList<>();
+ 
+    private int leading = 5;
+
+    private String[] score = new String[leading];
+
+    private JPanel leaderboardscorepanel;
 
     public Leaderboard(CardLayout cardLayout, JPanel container) {
         this.setLayout(new BorderLayout()); 
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
         JPanel topPanel = new JPanel();
-        topPanel.setBackground(Color.red);
         topPanel.setOpaque(false);
         topPanel.setPreferredSize(new Dimension(100, 100));
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setBackground(Color.blue);
         bottomPanel.setOpaque(false);
         bottomPanel.setPreferredSize(new Dimension(100, 100));
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setBackground(Color.green);
         leftPanel.setOpaque(false);
         leftPanel.setPreferredSize(new Dimension(100, 100));
 
         JPanel rightPanel = new JPanel();
-        rightPanel.setBackground(Color.yellow);
         rightPanel.setOpaque(false);
         rightPanel.setPreferredSize(new Dimension(100, 100));
 
         JPanel middlePanel = new JPanel(new BorderLayout());
-        middlePanel.setBackground(Color.pink);
         middlePanel.setPreferredSize(new Dimension(100, 100));
         middlePanel.setOpaque(false);
 
-         JPanel topMiddlePanel = new JPanel();
+        JPanel topMiddlePanel = new JPanel();
         topMiddlePanel.setOpaque(false);
       
+        setScores();
+        sortScores();
+
+        JLabel leaderboard = new JLabel("Leaderboard");
+        leaderboard.setBorder(new EmptyBorder(20, 0, 0, 0));
+        leaderboard.setForeground(Color.WHITE);
+        leaderboard.setFont(new Font("Roboto", Font.BOLD, 30));
+        leaderboard.setHorizontalAlignment(JLabel.CENTER);
+
+        topMiddlePanel.add(leaderboard, BorderLayout.NORTH);
+
+        JPanel centerMiddlePanel = new JPanel();
+        centerMiddlePanel.setPreferredSize(new Dimension(100, 300));
+        centerMiddlePanel.setBackground(Color.blue);
+        centerMiddlePanel.setOpaque(false);
+
+        leaderboardscorepanel = new JPanel();
+        leaderboardscorepanel.setBorder(new EmptyBorder(20, 0, 0, 0));
+        leaderboardscorepanel.setOpaque(false);
+        leaderboardscorepanel.setLayout(new GridLayout(5,1));
+
+        for(int i = 0; i < leading; i++) {
+            addLeaderboardScore(i);
+        }
+
+        centerMiddlePanel.add(leaderboardscorepanel, BorderLayout.CENTER);
+
         JPanel bottomMiddlePanel = new JPanel();
         bottomMiddlePanel.setPreferredSize(new Dimension(100, 40));
         bottomMiddlePanel.setOpaque(false);
@@ -74,7 +101,8 @@ public class Leaderboard extends JPanel {
             }
         });
 
-        middlePanel.add(topMiddlePanel, BorderLayout.CENTER);
+        middlePanel.add(topMiddlePanel, BorderLayout.NORTH);
+        middlePanel.add(centerMiddlePanel, BorderLayout.CENTER);
         middlePanel.add(bottomMiddlePanel, BorderLayout.SOUTH);
 
         this.add(topPanel, BorderLayout.NORTH);
@@ -82,6 +110,67 @@ public class Leaderboard extends JPanel {
         this.add(leftPanel, BorderLayout.EAST);
         this.add(rightPanel, BorderLayout.SOUTH);
         this.add(middlePanel, BorderLayout.CENTER);
+    }
+
+    public void addLeaderboardScore(int index) {
+        JLabel leaderboardScore = new JLabel(score[index]);
+        leaderboardScore.setBorder(new EmptyBorder(0, 0, 10, 0));
+        leaderboardScore.setForeground(Color.WHITE);
+        leaderboardScore.setFont(new Font("Roboto", Font.BOLD, 20));
+        leaderboardScore.setHorizontalAlignment(JLabel.CENTER);
+        leaderboardscorepanel.add(leaderboardScore);
+    }
+
+    public void sortScores(){
+        File scoreFile = new File("src/txt/scores.txt");
+        if (scoreFile.exists()) {
+            try (Scanner scanner = new Scanner(scoreFile)) {
+                while (scanner.hasNextInt()) {
+                    scores.add(scanner.nextInt());
+                }
+
+                scanner.close();
+                // sorts scores by highest to lowest
+                Collections.sort(scores, Collections.reverseOrder());
+
+                
+                // loop to remove scores if over 5
+                for(int i =  scores.size() ; scores.size() > 5; i--){
+
+                    scores.remove(i-1);
+                }
+            
+                // loop to set scores default too --- if there are no scores
+
+                for(int i = 0; i < scores.size(); i++){
+
+                    score[i] = String.valueOf(scores.get(i));
+                }
+
+                //FileWriter fw = new FileWriter(file, true);
+                FileWriter fw = new FileWriter(scoreFile);
+                BufferedWriter bw = new BufferedWriter(fw); //check differences between FileWriter and BufferedWriter
+
+                //loop to write new organized scores into file			
+                for(int i = 0; i < scores.size(); i++) { //reading from main memory instead of disk
+                    bw.write(String.valueOf(scores.get(i)) + "\n");
+			    }
+			
+                    bw.flush();
+                    bw.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }	
+        }   
+    }
+
+    public void setScores(){
+        // loop to set scores default too --- if there are no scores
+        for(int i = 0; i < 5; i++){
+
+            score[i] = "---";
+        }
     }
 
     @Override

@@ -152,6 +152,3 @@ public class StartPanel extends JPanel {
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }
-
-
-

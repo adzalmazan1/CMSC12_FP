@@ -8,12 +8,9 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class GameOverPanel extends JPanel {
@@ -22,20 +19,16 @@ public class GameOverPanel extends JPanel {
                    scorecontinuepanel, gameoverbuttonpanel;
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
-    private static SpaceImpactButton continuebutton, quitbutton;
+    private static SpaceImpactButton quitbutton;
  
-    private JLayeredPane layeredPane;
-    private SpaceImpact spaceImpact;
-    private SpaceImpactDisplay display;
+    SpaceImpact spaceImpact;
 
-    public GameOverPanel() {
+    public GameOverPanel(SpaceImpact spaceImpact) {
         this.setPreferredSize(CardFrame.SCREEN_SIZE);
         this.setBackground(Color.black);
         this.setLayout(new BorderLayout());
         
-        this.layeredPane = new JLayeredPane();
-        this.display = new SpaceImpactDisplay();
-        this.spaceImpact = new SpaceImpact(display);
+        this.spaceImpact = spaceImpact;
         
         // Top and side panels for spacing
         gameovertoppanel = new JPanel();
@@ -95,11 +88,8 @@ public class GameOverPanel extends JPanel {
 
         // Buttons panel
         gameoverbuttonpanel = new JPanel();
-        gameoverbuttonpanel.setLayout(new GridLayout(1, 2));
+        gameoverbuttonpanel.setLayout(new BorderLayout());
         gameoverbuttonpanel.setBackground(Color.BLACK);
-
-        continuebutton = new SpaceImpactButton("CONTINUE");
-        gameoverbuttonpanel.add(continuebutton);
 
         quitbutton = new SpaceImpactButton("QUIT");
         gameoverbuttonpanel.add(quitbutton);
@@ -108,8 +98,6 @@ public class GameOverPanel extends JPanel {
 
         // Event handling
         EventHandler handler = new EventHandler();
-        continuebutton.addActionListener(handler);
-        continuebutton.addMouseMotionListener(handler);
         quitbutton.addActionListener(handler);
         quitbutton.addMouseMotionListener(handler);
 
@@ -120,30 +108,8 @@ public class GameOverPanel extends JPanel {
     public class EventHandler extends MouseMotionAdapter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameOverPanel.this);
-            if (e.getSource() == continuebutton) {
-                System.out.println("Continue button pressed");
-                topFrame.getContentPane().removeAll();
-
-                layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight));
-                layeredPane.setLayout(null);
-
-                spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
-                display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
-
-                // ADD components to the layered pane
-                layeredPane.add(spaceImpact, Integer.valueOf(0)); // background layer
-                layeredPane.add(display, Integer.valueOf(1));     // display overlay
-
-                topFrame.add(layeredPane);
-                topFrame.revalidate();
-                topFrame.repaint();
-
-                spaceImpact.requestFocusInWindow(); 
-                spaceImpact.startGameThread();
-            } else if (e.getSource() == quitbutton) {
-                CardFrame card = new CardFrame();
-                card.setVisible(true);
+            if (e.getSource() == quitbutton) {
+                System.exit(0);
             }
         }
     }
