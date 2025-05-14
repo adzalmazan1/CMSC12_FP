@@ -30,13 +30,13 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int spawnInterval = 2000; // 2 seconds
     
     private long lastGiftTime = System.currentTimeMillis();
-    private int giftInterval = 10000; // 30 seconds
+    private int giftInterval = 60000; // 30 seconds, fadeaway add
 
     // To do: update spawnInterval / give it a multiplier depending on what wave you're in
 
     // Bullet spawn tile
     private long lastBulletTime = System.currentTimeMillis();
-    private int bulletInterval = 500;
+    private int bulletInterval = 400;
     
     // Scoring system variables
     protected int currentScore;
@@ -207,7 +207,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             }
     
             // Check for collision with adware or other enemies
-            if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() >= 0) {
+            if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() > 0) {
                 bullets.remove(i); 
                 adware.setHealth();
                 bulletUsed = true;
@@ -304,7 +304,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     
         // Draw wave elements based on score
-        if(currentScore >= enterWaveScore[0] && adware.getHealth() >= 0) {
+        if(currentScore >= enterWaveScore[0] && adware.getHealth() > 0) {
             adware.draw(g2D);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {

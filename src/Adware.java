@@ -58,7 +58,7 @@ public class Adware extends Boss {
                 speed = -speed;
             }
             movementCounter = 0;
-        }
+        }        
     }
 
     public void draw(Graphics2D g2D) {
@@ -82,6 +82,7 @@ public class Adware extends Boss {
     @Override
     public void addSpawn() {
         System.out.println("Adware spawn is running");
+        System.out.println("Adware Health: " + healthWidth);
         isSpawning = true;
 
         int numEnemies = 5;
