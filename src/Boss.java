@@ -1,3 +1,5 @@
+import java.awt.image.BufferedImage;
+
 public class Boss extends Entity implements Deployable, Runnable {
     protected int healthWidth;
     protected int healthHeight;
@@ -5,6 +7,10 @@ public class Boss extends Entity implements Deployable, Runnable {
     protected Thread spawnThread;
     protected boolean spawnStarted = false; // def values
     protected boolean threadRunning = true;
+
+    protected BufferedImage img;
+    protected boolean isSpawning;
+    protected BufferedImage spawnImg;
 
     // getters and setters here
     public int getHealth() {
@@ -28,21 +34,27 @@ public class Boss extends Entity implements Deployable, Runnable {
     // method for Runnable
     @Override
     public void run() {
-        while(threadRunning) {
-            addSpawn();
-            try {
-                Thread.sleep(7000);
-            }
-            catch(InterruptedException e) {
-                e.printStackTrace();
-            }
+    while (threadRunning) {
+        addSpawn();
+        try {
+            Thread.sleep(1000);         // Show spawn image for 1 second
+            setIsSpawning(false);
+            Thread.sleep(15000);         // Then wait before spawning again
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
+    }
+
 
     // override this method!
     public void addSpawn() {
         // override this method
         System.out.println("Override this addSpawn method");
+    }
+
+    public void setIsSpawning(boolean isSpawning) {
+        this.isSpawning = isSpawning;
     }
 
     public void stopSpawnThread() {

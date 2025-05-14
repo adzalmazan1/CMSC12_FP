@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -36,12 +35,15 @@ public class Adware extends Boss {
         // health width and height ** separate attributes **
         healthWidth = spaceImpact.tileSize * 5;
         healthHeight = 10;
+    
+        isSpawning = false;
     }
 
     @Override
     public void loadImage() {
         try {
             defaultImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/adware.png")); 
+            spawnImg = ImageIO.read(getClass().getResourceAsStream("img/bossSprites/adwareSpawn.png")); 
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -67,13 +69,21 @@ public class Adware extends Boss {
         // g2D.drawRect(x, y, width, height);
 
         // boss image
-        BufferedImage img = defaultImg;
+        if(!isSpawning) {
+            img = defaultImg;
+        }
+        else {
+            img = spawnImg;
+        }
+
         g2D.drawImage(img, x, y, width, height, null);
     }
 
     @Override
     public void addSpawn() {
         System.out.println("Adware spawn is running");
+        isSpawning = true;
+
         int numEnemies = 5;
         double angleStep = 2 * Math.PI / numEnemies;
         int radius = spaceImpact.tileSize;

@@ -13,67 +13,69 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class StartPanel extends JPanel {
-    private GridBagConstraints gbc = new GridBagConstraints();
     private Image backgroundImage;
-
-    JLabel play, settings, credits, how, back; // global
-
+    private GridBagConstraints gbc = new GridBagConstraints();
+    
+    private JLayeredPane layeredPane;
     private SpaceImpact spaceImpact;
     private SpaceImpactDisplay display;
     
-    private JLayeredPane layeredPane;
+    JLabel play, settings, credits, how, back;
+    CardLayout cardLayout;
+    JPanel container;
 
     public StartPanel(CardLayout cardLayout, JPanel container){
         this.setPreferredSize(new Dimension(CardFrame.SCREEN_SIZE));
         this.setLayout(new BorderLayout());
 
+        this.cardLayout = cardLayout;
+        this.container = container;
+
         // both inherits layout and container from startPanel
         this.layeredPane = new JLayeredPane();
-        this.display = new SpaceImpactDisplay();
-        this.spaceImpact = new SpaceImpact(display); // note on this
+        this.display = new SpaceImpactDisplay(cardLayout, container);
+        this.spaceImpact = new SpaceImpact(cardLayout, container, display); // note on this
+        
+        layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight));
+        layeredPane.setLayout(null);
+
+        spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
+        display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
+
+        // ADD components to the layered pane
+        layeredPane.add(spaceImpact, Integer.valueOf(0)); // background layer
+        layeredPane.add(display, Integer.valueOf(1));     // display overlay
+
+        container.add(layeredPane, "LayeredPane");
         
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setPreferredSize(new Dimension(200, 560));
+        leftPanel.setPreferredSize(new Dimension(400, 560));
         leftPanel.setLayout(new GridBagLayout());
         leftPanel.setBackground(Color.black);
         
         JLabel play = new JLabel("PLAY");
-        play.setFont(new Font("Race Sport", Font.BOLD, 15));
+        play.setFont(new Font("Race Sport", Font.BOLD, 20));
         play.setForeground(Color.white);
+        play.setHorizontalAlignment(JLabel.LEFT); 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(5, 0, 5, 0);
+
+        gbc.insets = new Insets(0, 60, 25, 0);
+        gbc.anchor = GridBagConstraints.WEST;    
         
         play.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); //changes the cursor into a hand cursor
 
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(StartPanel.this);
-                topFrame.getContentPane().removeAll();
-
-                layeredPane.setPreferredSize(new Dimension(spaceImpact.screenWidth, spaceImpact.screenHeight));
-                layeredPane.setLayout(null);
-
-                spaceImpact.setBounds(0, 0, spaceImpact.screenWidth, spaceImpact.screenHeight);
-                display.setBounds(0, 0, spaceImpact.screenWidth, 2 * spaceImpact.tileSize);
-
-                // ADD components to the layered pane
-                layeredPane.add(spaceImpact, Integer.valueOf(0)); // background layer
-                layeredPane.add(display, Integer.valueOf(1));     // display overlay
-
-                topFrame.add(layeredPane);
-                topFrame.revalidate();
-                topFrame.repaint();
+                cardLayout.show(container, "LayeredPane");
 
                 spaceImpact.requestFocusInWindow(); 
                 spaceImpact.startGameThread();
@@ -83,11 +85,11 @@ public class StartPanel extends JPanel {
         leftPanel.add(play, gbc);
 
         JLabel how = new JLabel("HOW TO PLAY");
-        how.setFont(new Font("Race Sport", Font.BOLD, 15));
+        how.setFont(new Font("Race Sport", Font.BOLD, 20));
         how.setForeground(Color.white);
+        how.setHorizontalAlignment(JLabel.LEFT); 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.insets = new Insets(5, 0, 5, 0);
 
         how.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); //changes the cursor into a hand cursor
 
@@ -101,11 +103,10 @@ public class StartPanel extends JPanel {
         leftPanel.add(how, gbc);
 
         JLabel settings = new JLabel("LEADERBOARD");
-        settings.setFont(new Font("Race Sport", Font.BOLD, 15));
+        settings.setFont(new Font("Race Sport", Font.BOLD, 20));
         settings.setForeground(Color.white);
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.insets = new Insets(5, 0, 5, 0);
 
         settings.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
 
@@ -121,11 +122,10 @@ public class StartPanel extends JPanel {
         JLabel back = new JLabel("BACK");
         gbc.gridx = 0;
         gbc.gridy = 4;
-        gbc.insets = new Insets(5, 0, 5, 0);
     
         leftPanel.add(back, gbc);
  
-        back.setFont(new Font("Race Sport", Font.BOLD, 15));
+        back.setFont(new Font("Race Sport", Font.BOLD, 20));
         back.setForeground(Color.white);
 
         back.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

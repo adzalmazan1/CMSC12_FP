@@ -1,3 +1,4 @@
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -9,9 +10,7 @@ import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class SpaceImpact extends JPanel implements Runnable {
     // Variables for the dimensions
@@ -65,7 +64,12 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     private boolean gameThreadRunning = true;
     
-    public SpaceImpact(SpaceImpactDisplay display) {
+    private CardLayout cardLayout;
+    private JPanel container;
+
+    private GameOverPanel gameOver;
+
+    public SpaceImpact(CardLayout cardLayout, JPanel container, SpaceImpactDisplay display) {
         this.display = display;
         this.eventH = new EventHandler();
         this.compViruses = new CopyOnWriteArrayList<ComputerVirus>();
@@ -75,6 +79,9 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.adware = new Adware(this);
         this.anon = new Anonymous(this, player);
         this.trojan = new Trojan(this);
+
+        this.cardLayout = cardLayout;
+        this.container = container;
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
@@ -353,6 +360,11 @@ public class SpaceImpact extends JPanel implements Runnable {
         gameThread.interrupt();
         gameThread = null;
         
+        gameOver = new GameOverPanel(cardLayout, container, this);
+        container.add(gameOver, "GameOver");
+        
+         cardLayout.show(container, "GameOver");
+
         File scoreFile = new File("src/txt/scores.txt");
         try {
             if(scoreFile.createNewFile()) {
@@ -365,15 +377,9 @@ public class SpaceImpact extends JPanel implements Runnable {
             FileWriter fw = new FileWriter(scoreFile, true);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write(String.valueOf(currentScore) + "\n");
+            bw.write(String.valueOf(currentScore));
             bw.flush();
             bw.close();
-
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(SpaceImpact.this);
-            topFrame.getContentPane().removeAll();
-            topFrame.add(new GameOverPanel(this));
-            topFrame.revalidate();
-            topFrame.repaint();
         }
         catch(IOException e) {
             e.printStackTrace();

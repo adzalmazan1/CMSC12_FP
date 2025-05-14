@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,15 +20,21 @@ public class GameOverPanel extends JPanel {
                    scorecontinuepanel, gameoverbuttonpanel;
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
+    
     private static SpaceImpactButton quitbutton;
  
     SpaceImpact spaceImpact;
-
-    public GameOverPanel(SpaceImpact spaceImpact) {
+    CardLayout cardLayout;
+    JPanel container;
+    
+    public GameOverPanel(CardLayout cardLayout, JPanel container, SpaceImpact spaceImpact) {
         this.setPreferredSize(CardFrame.SCREEN_SIZE);
-        this.setBackground(Color.black);
+        this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
         
+        this.cardLayout = cardLayout;
+        this.container = container;
+
         this.spaceImpact = spaceImpact;
         
         // Top and side panels for spacing

@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -18,8 +19,8 @@ public class SpaceImpactDisplay extends JPanel {
     private JLabel scoreCount;
     private JLabel statusLabel;
 
-    public SpaceImpactDisplay() {
-        this.spaceImpact = new SpaceImpact(this);
+    public SpaceImpactDisplay(CardLayout cardLayout, JPanel container) {
+        this.spaceImpact = new SpaceImpact(cardLayout, container, this);
         this.life = new Life(spaceImpact, true);
         
         this.setLayout(new BorderLayout());

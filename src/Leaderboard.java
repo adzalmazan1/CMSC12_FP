@@ -20,7 +20,6 @@ public class Leaderboard extends JPanel {
     private ArrayList<Integer> scores = new ArrayList<>();
  
     private int leading = 5;
-
     private String[] score = new String[leading];
 
     private JPanel leaderboardscorepanel;
@@ -130,28 +129,23 @@ public class Leaderboard extends JPanel {
                 }
 
                 scanner.close();
-                // sorts scores by highest to lowest
                 Collections.sort(scores, Collections.reverseOrder());
 
-                
                 // loop to remove scores if over 5
                 for(int i =  scores.size() ; scores.size() > 5; i--){
-
                     scores.remove(i-1);
                 }
             
                 // loop to set scores default too --- if there are no scores
-
                 for(int i = 0; i < scores.size(); i++){
-
                     score[i] = String.valueOf(scores.get(i));
                 }
 
-                //FileWriter fw = new FileWriter(file, true);
+                // FileWriter fw = new FileWriter(file, true);
                 FileWriter fw = new FileWriter(scoreFile);
                 BufferedWriter bw = new BufferedWriter(fw); //check differences between FileWriter and BufferedWriter
 
-                //loop to write new organized scores into file			
+                // loop to write new organized scores into file			
                 for(int i = 0; i < scores.size(); i++) { //reading from main memory instead of disk
                     bw.write(String.valueOf(scores.get(i)) + "\n");
 			    }
@@ -168,7 +162,6 @@ public class Leaderboard extends JPanel {
     public void setScores(){
         // loop to set scores default too --- if there are no scores
         for(int i = 0; i < 5; i++){
-
             score[i] = "---";
         }
     }
@@ -185,5 +178,4 @@ public class Leaderboard extends JPanel {
         g2d.fillRect(100, 100, 665, 315);
         g2d.dispose(); 
     }
-    
 }
