@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseMotionAdapter;
 
-import javax.smartcardio.Card;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -25,16 +23,12 @@ public class GameOverPanel extends JPanel {
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
     private static SpaceImpactButton continuebutton, quitbutton;
-
-    // try re using CardFrame
-    private CardLayout cardLayout;
-    private JPanel container;
-
+ 
     private JLayeredPane layeredPane;
     private SpaceImpact spaceImpact;
     private SpaceImpactDisplay display;
 
-    public GameOverPanel(CardLayout cardLayout, JPanel container) {
+    public GameOverPanel() {
         this.setPreferredSize(CardFrame.SCREEN_SIZE);
         this.setBackground(Color.black);
         this.setLayout(new BorderLayout());
@@ -148,16 +142,8 @@ public class GameOverPanel extends JPanel {
                 spaceImpact.requestFocusInWindow(); 
                 spaceImpact.startGameThread();
             } else if (e.getSource() == quitbutton) {
-                topFrame.getContentPane().removeAll();
-
-                cardLayout.show(container, "Title");                
-                topFrame.add(container);
-
-                topFrame.revalidate();
-                topFrame.repaint();
-
-                revalidate();
-                repaint();
+                CardFrame card = new CardFrame();
+                card.setVisible(true);
             }
         }
     }

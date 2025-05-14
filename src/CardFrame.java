@@ -15,9 +15,6 @@ public class CardFrame extends JFrame {
     private StartPanel start;
     private Leaderboard leaderboard;
     private HowToPlay how;
-    private GameOverPanel gameOver;
-
-    private SpaceImpact spaceImpact;
 
     public CardFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -32,14 +29,11 @@ public class CardFrame extends JFrame {
         start = new StartPanel(cardLayout, container);
         leaderboard = new Leaderboard(cardLayout, container);
         how = new HowToPlay(cardLayout, container);
-        gameOver = new GameOverPanel(cardLayout, container);
-
-
+        
         container.add(title, "Title");
         container.add(start, "Start");
         container.add(leaderboard, "Leaderboard");
         container.add(how, "HowToPlay");
-        container.add(gameOver, "GameOver");
 
         cardLayout.show(container, "Title");
 

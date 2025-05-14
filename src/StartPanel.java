@@ -34,10 +34,11 @@ public class StartPanel extends JPanel {
         this.setPreferredSize(new Dimension(CardFrame.SCREEN_SIZE));
         this.setLayout(new BorderLayout());
 
-        this.display = new SpaceImpactDisplay();
-        this.spaceImpact = new SpaceImpact(display);
+        // both inherits layout and container from startPanel
         this.layeredPane = new JLayeredPane();
-
+        this.display = new SpaceImpactDisplay();
+        this.spaceImpact = new SpaceImpact(display); // note on this
+        
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
         JPanel leftPanel = new JPanel();

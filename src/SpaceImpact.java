@@ -1,4 +1,3 @@
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -66,9 +65,6 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     private boolean gameThreadRunning = true;
     
-    protected CardLayout cardLayout;
-    protected JPanel container;
-
     public SpaceImpact(SpaceImpactDisplay display) {
         this.display = display;
         this.eventH = new EventHandler();
@@ -84,11 +80,6 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // drawing from this component will be done in an offscreen painting buffer
         this.addKeyListener(eventH);
         this.setFocusable(true);
-    }
-
-    public SpaceImpact(CardLayout cardLayout, JPanel container) {
-        this.cardLayout = cardLayout;
-        this.container = container;
     }
 
     // starting the game thread
@@ -405,8 +396,6 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     }
 }
-
-
 
 /* 
 Collission Logic
