@@ -140,13 +140,14 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     public void update() {
         player.update(); // player update -> sprite + movement
-    
         if (eventH.spacePressed) { // key listener in Space Impact panel
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastBulletTime >= bulletInterval) {
+                Sound.shootsound();
                 bullets.add(new Bullet(this, player));
                 lastBulletTime = currentTime;
             }
+            
         }
 
         for (int i = compViruses.size() - 1; i >= 0; i--) {
@@ -154,6 +155,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             cv.update();
             
             if(detectCollission(player, cv)) {
+                Sound.collision();
                 display.setLifeCount(display.getLifeCount() - 1);
                 compViruses.remove(i);
 
@@ -329,6 +331,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     public void bossCollissionLogic(Boss b, int offSetMult) {
         if(detectCollission(player, b, offSetMult)) {
             // System.out.println("Collision between player and adware");
+            Sound.collision();
             display.setLifeCount(0); // note
             gameTerminated("Game Over", "System compromised");
         }
@@ -367,7 +370,8 @@ public class SpaceImpact extends JPanel implements Runnable {
         gameTerminated = new GameTerminated(cardLayout, container, this, terminationConditions, addOnText);
         container.add(gameTerminated, "GameOver");
         
-         cardLayout.show(container, "GameOver");
+        Sound.bgmStop();
+        cardLayout.show(container, "GameOver");
 
         File scoreFile = new File("src/txt/scores.txt");
         try {

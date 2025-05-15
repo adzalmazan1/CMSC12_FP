@@ -77,7 +77,6 @@ public class StartPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 // For sound
                 Sound.clicksound();
-                Sound.bgmStop();
                 Sound.bgmGame();
 
                 cardLayout.show(container, "LayeredPane");

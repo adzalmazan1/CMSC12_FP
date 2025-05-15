@@ -18,7 +18,7 @@ public class Boss extends Entity implements Deployable, Runnable {
     }
 
     public void setHealth() {
-        healthWidth -= 30;
+        healthWidth -= 5;
         // change to 0.5 or 1
     }
 
