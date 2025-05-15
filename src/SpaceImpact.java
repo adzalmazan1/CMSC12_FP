@@ -27,10 +27,10 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Computer virus/normals spawn time
     private long lastSpawnTime = System.currentTimeMillis();
-    private int spawnInterval = 2000; // 2 seconds
+    private int spawnInterval = 3000; // 6 seconds
     
     private long lastGiftTime = System.currentTimeMillis();
-    private int giftInterval = 60000; // 30 seconds, fadeaway add
+    private int giftInterval = 30000; // 30 seconds, fadeaway add
 
     // To do: update spawnInterval / give it a multiplier depending on what wave you're in
 
@@ -43,7 +43,7 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int scorePlus = 50;
 
     // Waves quota
-    private int[] enterWaveScore = {20, 200, 300};
+    private int[] enterWaveScore = {200, 500, 7500};
     private int[] multiplier = {1, 2, 3};
     private int currWaveIndex = 0;
 
@@ -261,21 +261,21 @@ public class SpaceImpact extends JPanel implements Runnable {
             display.setGamePlayStatus("First Wave");
             adware.update();
             bossCollissionLogic(adware, 2);
-            startBossSpawn(adware);
+            startBossSpawn(adware, currWaveIndex);
         }
         else if(currentScore >= enterWaveScore[1] && anon.getHealth() > 0 && adware.getHealth() <= 0) {
             currWaveIndex = 1;
             display.setGamePlayStatus("Second Wave");
             anon.update();
             bossCollissionLogic(anon, 1);
-            startBossSpawn(anon);            
+            startBossSpawn(anon, currWaveIndex);            
         }
         else if(currentScore >= enterWaveScore[2] && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
             currWaveIndex = 2;
             display.setGamePlayStatus("The Final Wave");
             trojan.update();
             bossCollissionLogic(trojan, 2);
-            startBossSpawn(trojan);
+            startBossSpawn(trojan, currWaveIndex);
         }
     }
     
@@ -394,9 +394,11 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     }
 
-    public void startBossSpawn(Boss b) {
+    public void startBossSpawn(Boss b, int index) {
         // start only once the spawn thread
         if(!b.spawnStarted) {
+            spawnInterval /= multiplier[index];
+            System.out.println(spawnInterval);
             b.spawnThread = new Thread(b);
             b.spawnThread.start();
             b.spawnStarted = true; // spawn started from this moment

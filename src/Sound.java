@@ -39,26 +39,6 @@ public class Sound {
         }
     }
 
-    public static void incrementBGM() {
-        float newvol = bgmVolume + 0.1f;
-        if (newvol > 1.0f) {
-            bgmVolume = 1.0f;
-        } else {
-            bgmVolume = newvol;
-        }
-        setBGMVolume(bgmVolume);
-    }
-
-    public static void decrementBGM() {
-        float newvol = bgmVolume - 0.1f;
-        if (newvol < 0.0f) {
-            bgmVolume = 0.0f;
-        } else {
-            bgmVolume = newvol;
-        }
-        setBGMVolume(bgmVolume);
-    }
-
     public static Clip playSFX(String soundPath) {
         try {
             File sfxFile = new File(soundPath);
@@ -93,23 +73,12 @@ public class Sound {
     }
 
     // BGM presets
-
-    public static void bgmMenu() {
-        if (bgmclip == null || !bgmclip.isRunning()) {
-            playBGM("src/aud/menu.wav");
-        }
-    }
-
     public static void bgmGame() {
         if (bgmclip == null || !bgmclip.isRunning()) {
             playBGM("src/aud/game.wav");
         }
     }
-
-    public static void GameOver() {
-        // Intentionally left blank or under construction
-    }
-
+    
     public static void bgmStop() {
         if (bgmclip != null) {
             stopSound(bgmclip);

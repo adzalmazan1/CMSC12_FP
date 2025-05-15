@@ -162,7 +162,7 @@ public class Leaderboard extends JPanel {
 
     public void setScores(){
         // loop to set scores default too --- if there are no scores
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < leading; i++){
             score[i] = "---";
         }
     }

@@ -77,6 +77,26 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {  
+        int numEnemies = 5;               
+        int spacingX = spaceImpact.tileSize * 2;  
+        int spacingY = spaceImpact.tileSize;      
+
+        int startX = this.x - spacingX; 
+        int centerY = this.y + this.height / 2;
+
+        for (int i = 0; i < numEnemies; i++) {
+            int offsetFromCenter = i - numEnemies / 2; 
+
+            int virusX = startX + Math.abs(offsetFromCenter) * spacingX;
+
+            int virusY = centerY + offsetFromCenter * spacingY;
+
+            ComputerVirus virus = new ComputerVirus(spaceImpact);
+            virus.x = virusX;
+            virus.y = virusY;
+
+            spaceImpact.compViruses.add(virus);
+        }
         /* 
         This is boss 1 spawning and it works.
         System.out.println("Anon spawn is running");
