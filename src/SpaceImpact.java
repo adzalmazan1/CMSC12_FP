@@ -386,7 +386,7 @@ public class SpaceImpact extends JPanel implements Runnable {
             FileWriter fw = new FileWriter(scoreFile, true); // appends to file
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write(String.valueOf(currentScore));
+            bw.write(String.valueOf(currentScore) + "\n");
             bw.flush();
             bw.close();
         }
