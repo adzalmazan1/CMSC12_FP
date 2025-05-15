@@ -27,7 +27,7 @@ public class SpaceImpact extends JPanel implements Runnable {
 
     // Computer virus/normals spawn time
     private long lastSpawnTime = System.currentTimeMillis();
-    private int spawnInterval = 3000; // 6 seconds
+    private int spawnInterval = 2400; // 2.4 seconds
     
     private long lastGiftTime = System.currentTimeMillis();
     private int giftInterval = 30000; // 30 seconds, fadeaway add
@@ -43,7 +43,8 @@ public class SpaceImpact extends JPanel implements Runnable {
     private int scorePlus = 50;
 
     // Waves quota
-    private int[] enterWaveScore = {200, 500, 7500};
+    private int[] enterWaveScore = {250, 5000, 10000};
+    private int[] bossPlus = {2500, 5000, 10000};
     private int[] multiplier = {1, 2, 3};
     private int currWaveIndex = 0;
 
@@ -146,8 +147,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 Sound.shootsound();
                 bullets.add(new Bullet(this, player));
                 lastBulletTime = currentTime;
-            }
-            
+            }   
         }
 
         for (int i = compViruses.size() - 1; i >= 0; i--) {
@@ -211,11 +211,12 @@ public class SpaceImpact extends JPanel implements Runnable {
             // Check for collision with adware or other enemies
             if(currentScore >= enterWaveScore[0] && detectCollission(b, adware, 3) && !bulletUsed && adware.getHealth() > 0) {
                 bullets.remove(i); 
+                // add a score plus here
                 adware.setHealth();
                 bulletUsed = true;
                 
                 // one time stop of adware's spawn thread when health reaches zero
-                stopBossSpawn(adware); // only works if health of boss is zero
+                stopBossSpawn(adware, currWaveIndex); // only works if health of boss is zero
             }
             else if(currentScore >= enterWaveScore[1] && detectCollission(b, anon, 2) && !bulletUsed && anon.getHealth() > 0 && adware.getHealth() <= 0) {
                 bullets.remove(i); 
@@ -223,7 +224,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bulletUsed = true;
 
                 // one time stop of adware's spawn thread when health reaches zero
-                stopBossSpawn(anon);
+                stopBossSpawn(anon, currWaveIndex);
             }
             else if(currentScore >= enterWaveScore[2] && detectCollission(b, anon, 3) && !bulletUsed && trojan.getHealth() > 0 && anon.getHealth() <= 0 && adware.getHealth() <= 0) {
                 bullets.remove(i);
@@ -231,7 +232,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                 bulletUsed = true;
 
                 // one time stop of adware's spawn thread when health reaches zero
-                stopBossSpawn(trojan);
+                stopBossSpawn(trojan, currWaveIndex);
 
                 if(trojan.getHealth() <= 0) {
                     gameTerminated("Game Won", "Malware defeated");
@@ -405,10 +406,12 @@ public class SpaceImpact extends JPanel implements Runnable {
         }
     }
 
-    public void stopBossSpawn(Boss b) {
+    public void stopBossSpawn(Boss b, int currWaveIndex) {
         // one time stop of adware's spawn thread when health reaches zero
         if (b.getHealth() <= 0) {
             b.stopSpawnThread();
+            currentScore += bossPlus[currWaveIndex];
+            display.setCurrentScore(currentScore);
         }
     }
 }
