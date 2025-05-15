@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;

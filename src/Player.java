@@ -52,6 +52,7 @@ public class Player extends Entity implements Deployable {
     // add sprite update
     public void update() {
         // update information about computer virus object created
+        // this player update gets done in the mainGameThread
         frameCounter++;
         if (frameCounter >= frameChange) {
             if (spriteNum == 1) {

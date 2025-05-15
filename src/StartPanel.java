@@ -75,8 +75,12 @@ public class StartPanel extends JPanel {
         play.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                cardLayout.show(container, "LayeredPane");
+                // For sound
+                Sound.clicksound();
+                Sound.bgmStop();
+                Sound.bgmGame();
 
+                cardLayout.show(container, "LayeredPane");
                 spaceImpact.requestFocusInWindow(); 
                 spaceImpact.startGameThread();
             }
@@ -96,7 +100,8 @@ public class StartPanel extends JPanel {
         how.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-               cardLayout.show(container, "HowToPlay");
+                Sound.clicksound();
+                cardLayout.show(container, "HowToPlay");
             }
         });
     
@@ -113,6 +118,7 @@ public class StartPanel extends JPanel {
         settings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Sound.clicksound();
                 cardLayout.show(container, "Leaderboard");
             }
         });
@@ -132,6 +138,7 @@ public class StartPanel extends JPanel {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Sound.clicksound();
                 cardLayout.show(container, "Title");
             }
         });

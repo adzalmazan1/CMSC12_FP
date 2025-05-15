@@ -35,6 +35,7 @@ public class TitlePanel extends JPanel {
         startIcon1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Sound.clicksound();
                 cardLayout.show(container, "Start");
             }
         });

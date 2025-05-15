@@ -79,6 +79,7 @@ public class HowToPlay extends JPanel {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Sound.clicksound();
                 cardLayout.show(container, "Start");
             }
         });
