@@ -383,7 +383,7 @@ public class SpaceImpact extends JPanel implements Runnable {
                  System.out.println("File already exists.");
             }
 
-            FileWriter fw = new FileWriter(scoreFile, true);
+            FileWriter fw = new FileWriter(scoreFile, true); // appends to file
             BufferedWriter bw = new BufferedWriter(fw);
 
             bw.write(String.valueOf(currentScore));

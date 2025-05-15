@@ -141,9 +141,8 @@ public class Leaderboard extends JPanel {
                 for(int i = 0; i < scores.size(); i++){
                     score[i] = String.valueOf(scores.get(i));
                 }
-
-                // FileWriter fw = new FileWriter(file, true);
-                FileWriter fw = new FileWriter(scoreFile);
+                
+                FileWriter fw = new FileWriter(scoreFile, true);
                 BufferedWriter bw = new BufferedWriter(fw); //check differences between FileWriter and BufferedWriter
 
                 // loop to write new organized scores into file			

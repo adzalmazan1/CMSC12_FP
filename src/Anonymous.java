@@ -77,6 +77,7 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {  
+        isSpawning = true;
         int numEnemies = 8;               
         int spacingX = spaceImpact.tileSize * 2;  
         int spacingY = spaceImpact.tileSize;      

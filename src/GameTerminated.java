@@ -9,9 +9,11 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 public class GameTerminated extends JPanel {
@@ -21,12 +23,11 @@ public class GameTerminated extends JPanel {
 
     private JLabel gameoverlabel, continuelabel, finalscorelabel;
     
-    private static CustomizedButton quitbutton;
+    private static CustomizedButton newGameButton, quitbutton;
  
     SpaceImpact spaceImpact;
     CardLayout cardLayout;
     JPanel container;
-
     String terminationConditions;
     
     public GameTerminated(CardLayout cardLayout, JPanel container, SpaceImpact spaceImpact, String terminationConditions, String addOnText) {
@@ -34,11 +35,9 @@ public class GameTerminated extends JPanel {
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
         
+        this.spaceImpact = spaceImpact;
         this.cardLayout = cardLayout;
         this.container = container;
-
-        this.spaceImpact = spaceImpact;
-
         this.terminationConditions = terminationConditions;
         
         // Top and side panels for spacing
@@ -99,16 +98,22 @@ public class GameTerminated extends JPanel {
 
         // Buttons panel
         gameoverbuttonpanel = new JPanel();
-        gameoverbuttonpanel.setLayout(new BorderLayout());
+        gameoverbuttonpanel.setLayout(new GridLayout(1, 2));
         gameoverbuttonpanel.setBackground(Color.BLACK);
 
-        quitbutton = new CustomizedButton("QUIT");
+        newGameButton = new CustomizedButton("NEW GAME");
+        gameoverbuttonpanel.add(newGameButton);
+
+        quitbutton = new CustomizedButton("QUIT GAME");
         gameoverbuttonpanel.add(quitbutton);
 
         gameoverpanel.add(gameoverbuttonpanel);
 
         // Event handling
         EventHandler handler = new EventHandler();
+        newGameButton.addActionListener(handler);
+        newGameButton.addMouseMotionListener(handler);
+
         quitbutton.addActionListener(handler);
         quitbutton.addMouseMotionListener(handler);
 
@@ -119,7 +124,14 @@ public class GameTerminated extends JPanel {
     public class EventHandler extends MouseMotionAdapter implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == quitbutton) {
+            if (e.getSource() == newGameButton) {
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(GameTerminated.this);
+                topFrame.dispose();
+
+                CardFrame card = new CardFrame();
+                card.setVisible(true);
+            }
+            else if (e.getSource() == quitbutton) {
                 System.exit(0);
             }
         }
