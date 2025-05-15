@@ -77,7 +77,7 @@ public class SpaceImpact extends JPanel implements Runnable {
         this.life = new CopyOnWriteArrayList<Life>(); // fix life
         this.player = new Player(this, eventH);
         this.adware = new Adware(this);
-        this.anon = new Anonymous(this, player);
+        this.anon = new Anonymous(this);
         this.trojan = new Trojan(this);
 
         this.cardLayout = cardLayout;

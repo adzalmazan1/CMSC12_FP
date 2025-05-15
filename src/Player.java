@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -10,6 +12,8 @@ public class Player extends Entity implements Deployable {
     private EventHandler eventH;
 
     private BufferedImage defaultImg2;
+
+    protected CopyOnWriteArrayList<Point> points = new CopyOnWriteArrayList<Point>();
 
     public Player(SpaceImpact spaceImpact, EventHandler eventH) {
         this.spaceImpact = spaceImpact;
@@ -76,6 +80,8 @@ public class Player extends Entity implements Deployable {
                 direction = "right";
                 x += speed;
             }
+
+            points.add(new Point(x, y)); // note on this
         }
         else {
             direction = "def";

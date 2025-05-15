@@ -5,8 +5,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Adware extends Boss {
-    public static final String Thread = null;
-
     private SpaceImpact spaceImpact;
 
     private int yUpper; 

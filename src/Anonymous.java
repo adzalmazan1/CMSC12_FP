@@ -1,19 +1,18 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 public class Anonymous extends Boss {
     private SpaceImpact spaceImpact;
-    private Player player;
     
     private int xLeftMost; 
     private int xRightMost;
 
-    public Anonymous(SpaceImpact spaceImpact, Player player) {
+    public Anonymous(SpaceImpact spaceImpact) {
         this.spaceImpact = spaceImpact;
-        this.player = player;
         setDefaultValues();
         loadImage();
     }
@@ -79,26 +78,28 @@ public class Anonymous extends Boss {
 
     @Override
     public void addSpawn() {  
-        System.out.println("Anon spawn is running: " + player.x);
-        isSpawning = true;
         /* 
-        int centerX = player.x + player.width / 2;
-        int centerY = player.y + player.height / 2;
+        This is boss 1 spawning and it works.
+        System.out.println("Anon spawn is running");
+        System.out.println("Anon Health: " + healthWidth);
+        isSpawning = true;
 
-        int radius = 150; 
-        int virusCount = 5;
+        int numEnemies = 8;
+        double angleStep = 2 * Math.PI / numEnemies;
+        int radius = spaceImpact.tileSize;
 
-        for (int i = 0; i < virusCount; i++) {
+        int centerX = x - radius;
+        int centerY = y + height / 2;
+
+        for (int i = 0; i < numEnemies; i++) {
+            double angle = i * angleStep;
+            int virusX = (int)(centerX + radius * Math.cos(angle));
+            int virusY = (int)(centerY + radius * Math.sin(angle));
+
             ComputerVirus virus = new ComputerVirus(spaceImpact);
-            double angle = 2 * Math.PI * i / virusCount;
-
-            int newX = (int) (centerX + radius * Math.cos(angle)) - virus.width / 2;
-            int newY = (int) (centerY + radius * Math.sin(angle)) - virus.height / 2;
-
-            virus.x = newX;
-            virus.y = newY;
+            virus.x = virusX;
+            virus.y = virusY;
             spaceImpact.compViruses.add(virus);
-            
         }
         */
     }

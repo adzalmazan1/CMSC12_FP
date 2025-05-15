@@ -67,7 +67,7 @@ public class Trojan extends Boss {
     public void addSpawn() {  
         System.out.println("Trojan spawn is running");
         isSpawning = true;
-        int numEnemies = 4;
+        int numEnemies = 8;
         int spacing = spaceImpact.tileSize + 10;
 
         int spawnX = x - spaceImpact.tileSize;
