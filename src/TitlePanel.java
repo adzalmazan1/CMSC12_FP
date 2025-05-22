@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class TitlePanel extends JPanel {
     private Image backgroundImage;
@@ -23,14 +24,19 @@ public class TitlePanel extends JPanel {
 
         backgroundImage = new ImageIcon(getClass().getResource("img/bg/titleBackdrop.png")).getImage();
 
-        ImageIcon titleIcon = new ImageIcon(getClass().getResource("img/title.png")); 
-        Image scaledTitle = titleIcon.getImage().getScaledInstance(700, 460, Image.SCALE_SMOOTH);
-        JLabel title = new JLabel(new ImageIcon(scaledTitle));
-        title.setOpaque(false);
+        JLabel titleTop = new JLabel("Malware", JLabel.CENTER);
+        titleTop.setBorder(new EmptyBorder(200,0, 0, 0));
+        titleTop.setFont(new Font("Race Sport", Font.BOLD, 85));
+        titleTop.setForeground(Color.WHITE);
+        
+        JLabel titleBot = new JLabel("Invasion", JLabel.CENTER);
+        titleBot.setBorder(new EmptyBorder(0,0, 120, 0));
+        titleBot.setFont(new Font("Race Sport", Font.BOLD, 70));
+        titleBot.setForeground(Color.WHITE);
 
         JLabel startIcon1 = new JLabel("START");
         startIcon1.setFont(new Font("Race Sport", Font.BOLD, 20));
-        startIcon1.setForeground(Color.white);
+        startIcon1.setForeground(Color.WHITE);
         startIcon1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         startIcon1.addMouseListener(new MouseAdapter() {
             @Override
@@ -43,7 +49,9 @@ public class TitlePanel extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setPreferredSize(new Dimension(875, 400));
         topPanel.setOpaque(false);
-        topPanel.add(title, BorderLayout.CENTER);
+        
+        topPanel.add(titleTop, BorderLayout.CENTER);
+        topPanel.add(titleBot, BorderLayout.SOUTH);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setPreferredSize(new Dimension(875, 100));
