@@ -79,8 +79,6 @@ public class Adware extends Boss {
 
     @Override
     public void addSpawn() {
-        System.out.println("Adware spawn is running");
-        System.out.println("Adware Health: " + healthWidth);
         isSpawning = true;
 
         int numEnemies = 5;
